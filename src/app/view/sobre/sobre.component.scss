@@ -1,0 +1,27 @@
+.container-sobre {
+    .imagem {
+        display: flex;
+        justify-content: center;
+        height: 260px;
+    }
+
+    .descricao {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .nome-empresa {
+            font-size: 22px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .nome-sistema {
+            font-size: 18px;
+        }
+
+        .versao-sistema {
+            font-size: 17px;
+        }
+    }
+}

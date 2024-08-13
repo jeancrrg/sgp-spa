@@ -157,6 +157,11 @@ export class AppMenuComponent implements OnInit {
                     },
                     {
                         label: 'View Source', icon: 'pi pi-fw pi-search', url: ['https://github.com/primefaces/sakai-ng'], target: '_blank'
+                    },
+                    {
+                        label: 'Sobre',
+                        icon: 'pi pi-fw pi-info-circle',
+                        routerLink: ['/sobre']
                     }
                 ]
             }
