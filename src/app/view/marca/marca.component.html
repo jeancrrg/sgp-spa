@@ -1,0 +1,68 @@
+<p-breadcrumb [model]="itemsBreadCrumb"></p-breadcrumb>
+
+
+
+<!--
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+
+
+        </div>
+    </div>
+</div>
+-->
+
+<div class="ui-g ui-fluid">
+    <div class="ui-g-12 pb-0">
+        <div class="card ui-g-12">
+            <div class="ui-g-12">
+
+                <p-toolbar styleClass="mb-4">
+                    <ng-template pTemplate="left">
+                        <div class="my-2 btn-min-width">
+                            <button pButton pRipple label="Pesquisar" icon="pi pi-search" class="mr-2" (click)="pesquisar()"></button>
+                            <button pButton pRipple label="Limpar" icon="pi pi-trash" class="mr-2" (click)="limparFiltros()"></button>
+                            <button pButton pRipple label="Cadastrar" icon="pi pi-save" (click)="cadastrar()"></button>
+                        </div>
+                    </ng-template>
+
+                    <ng-template pTemplate="right">
+                        <div class="btn-min-width">
+                            <button pButton pRipple label="Exportar" icon="pi pi-file-excel" (click)="exportar()"></button>
+                        </div>
+                    </ng-template>
+                </p-toolbar>
+
+                <p-panel>
+                    <p-header>
+                        <i class="pi pi-fw pi-sort-amount-up" style="vertical-align: middle;"></i>
+                        <span> Filtro Consulta </span>
+                    </p-header>
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+
+                            <div class="ui-g-12">
+                                <span class="md-inputfield">
+                                    <input pInputText type="text" [(ngModel)]="codigoMarca" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="7">
+                                    <label> Código </label>
+                                </span>
+                            </div>
+
+                            <div class="ui-g-12">
+                                <span class="md-inputfield">
+                                    <input pInputText type="text" [(ngModel)]="codigoMarca" maxlength="100">
+                                    <label> Descrição </label>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                </p-panel>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>

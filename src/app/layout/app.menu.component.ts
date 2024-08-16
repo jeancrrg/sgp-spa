@@ -1,6 +1,7 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { LayoutService } from './service/app.layout.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-menu',
@@ -15,13 +16,48 @@ export class AppMenuComponent implements OnInit {
     ngOnInit() {
         this.model = [
             {
-                label: 'Home',
+                label: 'INÍCIO',
                 items: [
-                    { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                    { label: 'Dashboard', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/'] }
                 ]
             },
             {
-                label: 'UI Components',
+                label: 'CADASTRO',
+                items: [
+                    { label: 'Produto', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['/uikit/formlayout'] },
+                    { label: 'Estoque', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/formlayout'] },
+                    { label: 'Preço', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/formlayout'] },
+                    { label: 'Imagem', icon: 'pi pi-fw pi-image', routerLink: ['/uikit/formlayout'] },
+                    { label: 'Marca', icon: 'pi pi-fw pi-tag', routerLink: ['/marca'] },
+                    { label: 'Categoria', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/formlayout'] },
+                    { label: 'Departamento', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/formlayout'] }
+                ]
+            },
+            {
+                label: 'OPERAÇÃO',
+                items: [
+                    { label: 'Associar Categoria', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/formlayout'] },
+                    { label: 'Importar em Lote', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/formlayout'] }
+                ]
+            },
+            {
+                label: 'ADMINISTRADOR',
+                items: [
+                    { label: 'Usuário', icon: 'pi pi-fw pi-user', routerLink: ['/uikit/formlayout'] },
+                    { label: 'Permissão', icon: 'pi pi-fw pi-unlock', routerLink: ['/uikit/formlayout'] }
+                ]
+            },
+            {
+                label: 'SISTEMA',
+                items: [
+                    { label: 'Sobre', icon: 'pi pi-fw pi-info-circle', routerLink: ['/sobre'] }
+                ]
+            },
+
+
+
+            {
+                label: 'Ui Kit',
                 items: [
                     { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
                     { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
@@ -157,11 +193,6 @@ export class AppMenuComponent implements OnInit {
                     },
                     {
                         label: 'View Source', icon: 'pi pi-fw pi-search', url: ['https://github.com/primefaces/sakai-ng'], target: '_blank'
-                    },
-                    {
-                        label: 'Sobre',
-                        icon: 'pi pi-fw pi-info-circle',
-                        routerLink: ['/sobre']
                     }
                 ]
             }

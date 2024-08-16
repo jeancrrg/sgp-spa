@@ -15,14 +15,16 @@ import { AppRotas } from './app.routes';
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
-    imports: [
-        RouterModule.forRoot(AppRotas),
-        AppLayoutModule
-    ],
+    imports: [RouterModule.forRoot(AppRotas), AppLayoutModule],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
-        CountryService, CustomerService, EventService, IconService, NodeService,
-        PhotoService, ProductService
+        CountryService,
+        CustomerService,
+        EventService,
+        IconService,
+        NodeService,
+        PhotoService,
+        ProductService,
     ],
     bootstrap: [AppComponent],
 })
