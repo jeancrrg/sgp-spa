@@ -1,0 +1,79 @@
+<div class="tabela-principal mt-5">
+    <p-table #tabela class="highligth-row" [columns]="columns" [value]="value" [rowsPerPageOptions]="rowsPerPageOptions"
+        [paginator]="paginator" [responsive]="responsive" [paginatorPosition]="paginatorPosition" [dataKey]="dataKey"
+        [rows]="rows" [globalFilterFields]="globalFilterFields" [(selection)]="selection" [lazy]="lazy"
+        (onLazyLoad)="loadLazy($event)" [totalRecords]="totalRecords" [selectionMode]="selectionMode"
+        (onRowSelect)="onRowSelectChange($event)" (onRowUnselect)="onRowUnselectChange($event)">
+
+        <ng-template pTemplate="caption" *ngIf="caption && stringNotEmpty(caption)">
+            <span>{{ caption }}</span>
+            <span style="float: right" class="ui-inputgroup"
+                *ngIf="globalFilterFields && globalFilterFields.length > 0">
+                <input type="text" pInputText size="50" [placeholder]="labelGlobalFilter"
+                    (input)="tabela.filterGlobal($event.target.value, 'contains')" style="color: white">
+                <span class="ui-inputgroup-addon no-events"><i class="material-icons">search</i></span>
+            </span>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th style="width: 3px" *ngIf="selection &&  selectionMode != 'single'">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th *ngFor="let col of columns"
+                    [pSortableColumn]="col.subField ? (col.field + '.' + col.subField) : col.field"
+                    [width]="col.width ? col.width : (col.buttonField ? '40px' : col.width)">
+                    {{col.header}}
+                    <p-sortIcon *ngIf="col.field" [field]="col.subField ? (col.field + '.' + col.subField) : col.field">
+                    </p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="columns?.length" style="padding: 20px;text-align: center;">
+                    {{ emptyMessage }}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns" let-index="rowIndex">
+            <tr [pSelectableRow]="rowData" [id]="index == 0 ? 'clk-first-table-row' : ''">
+                <td *ngIf="selection &&  selectionMode != 'single'">
+                    <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                </td>
+                <td *ngFor="let col of columns"
+                    [style.text-align]="col.buttonField ? col.align ? col.align : 'center' : isCellPhoneResolution() ? '' : col.align"
+                    [ngClass]="{'ellipsis': col.ellipsis}">
+                    <!-- COLUNA NORMAL -->
+                    <span
+                        *ngIf="!col.dateField && !col.separator && !col.currencyField && !col.boolField && !col.buttonField"
+                        [title]="fieldRowData(rowData, col.field)">
+                        {{fieldRowData(rowData, col.field)}}
+                    </span>
+                    <!-- COLUNA DO TIPO DATA -->
+                    <span *ngIf="col.dateField" [title]="fieldRowData(rowData, col.field) | date: col.datePipe">
+                        {{fieldRowData(rowData, col.field) | date: col.datePipe}}
+                    </span>
+                    <!-- COLUNA MONETÁRIA -->
+                    <span *ngIf="col.currencyField">
+                        {{fieldRowData(rowData, col.field) | currencyFormat: 'BRL':true:'1.2-2'}}
+                    </span>
+                    <!-- COLUNA BOOLEAN -->
+                    <span *ngIf="col.boolField">
+                        {{fieldRowData(rowData, col.field) | pxtSimNao: true:true }}
+                    </span>
+                    <!-- COLUNA COM SEPARADOR -->
+                    <span *ngIf="col.separator"
+                        [title]="fieldRowData(rowData, col.field) + col.separator + fieldRowData(rowData, col.concatenateField)">
+                        {{fieldRowData(rowData, col.field) + col.separator + fieldRowData(rowData,
+                        col.concatenateField)}}
+                    </span>
+                    <!-- COLUNA DE BOTÃO
+                    <span *ngIf="col.buttonField && hasPermission(col.isUserInRule)" [pTooltip]="col.tooltip"> -->
+                    <span *ngIf="col.buttonField" [pTooltip]="col.tooltip">
+                        <button pButton [icon]="'ui-icon-' + col.iconButton" (click)="col.command(rowData)"></button>
+                    </span>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

@@ -1,10 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { ToolbarComponent } from './toolbar-buttons.component';
 import { NgModule } from '@angular/core';
+import { ToolbarButtonsComponent } from './toolbar-buttons.component';
+import { ToolbarModule } from 'primeng/toolbar';
 
 @NgModule({
-    declarations: [ToolbarComponent],
-    imports: [CommonModule, ToolbarModule],
-    exports: [ToolbarComponent],
+    declarations: [ToolbarButtonsComponent],
+    imports: [
+        CommonModule,
+        ToolbarModule
+    ],
+    exports: [ToolbarButtonsComponent],
 })
-export class ToolbarModule {}
+export class ToolbarButtonsModule {}

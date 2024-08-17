@@ -1,11 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'app-toolbar',
-    templateUrl: './toolbar.component.html',
-    styleUrl: './toolbar.component.scss',
+    selector: 'app-toolbar-buttons',
+    templateUrl: './toolbar-buttons.component.html',
+    styleUrl: './toolbar-buttons.component.scss',
 })
-export class ToolbarComponent implements OnInit {
+export class ToolbarButtonsComponent implements OnInit {
+
+    @Input()
+    stickyMode: boolean = false;
 
     constructor() {
 

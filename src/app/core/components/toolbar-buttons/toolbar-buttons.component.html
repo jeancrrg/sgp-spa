@@ -1,6 +1,6 @@
-<div class="ui-g">
+<div class="ui-g" [ngClass]="{'stickyMode': stickyMode}" >
     <div class="ui-g-12">
-        <p-toolbar class="btn-min-w">
+        <p-toolbar styleClass="mb-4">
             <ng-content></ng-content>
         </p-toolbar>
     </div>

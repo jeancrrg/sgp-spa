@@ -1,67 +1,55 @@
 <p-breadcrumb [model]="itemsBreadCrumb"></p-breadcrumb>
 
-
-
-<!--
-<div class="grid">
-    <div class="col-12">
-        <div class="card">
-
-
-        </div>
-    </div>
-</div>
--->
-
 <div class="ui-g ui-fluid">
     <div class="ui-g-12 pb-0">
         <div class="card ui-g-12">
             <div class="ui-g-12">
-
-                <p-toolbar styleClass="mb-4">
-                    <ng-template pTemplate="left">
-                        <div class="my-2 btn-min-width">
-                            <button pButton pRipple label="Pesquisar" icon="pi pi-search" class="mr-2" (click)="pesquisar()"></button>
-                            <button pButton pRipple label="Limpar" icon="pi pi-trash" class="mr-2" (click)="limparFiltros()"></button>
-                            <button pButton pRipple label="Cadastrar" icon="pi pi-save" (click)="cadastrar()"></button>
-                        </div>
-                    </ng-template>
-
-                    <ng-template pTemplate="right">
-                        <div class="btn-min-width">
-                            <button pButton pRipple label="Exportar" icon="pi pi-file-excel" (click)="exportar()"></button>
-                        </div>
-                    </ng-template>
-                </p-toolbar>
+                <app-toolbar-buttons>
+                    <div class="ui-toolbar-group-left btn-min-width">
+                        <button pButton pRipple label="Pesquisar" icon="pi pi-search" class="mr-2" (click)="pesquisar()" *ngIf="!estaCadastrandoOuEditando"></button>
+                        <button pButton pRipple label="Limpar" icon="pi pi-trash" class="mr-2" (click)="limparFiltros()" *ngIf="!estaCadastrandoOuEditando"></button>
+                        <button pButton pRipple label="Cadastrar" icon="pi pi-save" (click)="habilitarCadastro()" *ngIf="!estaCadastrandoOuEditando"></button>
+                        <button pButton pRipple label="Salvar" icon="pi pi-check" (click)="salvar()" *ngIf="estaCadastrandoOuEditando"></button>
+                        <button pButton pRipple label="Cancelar" icon="pi pi-times-circle" (click)="desabilitarCadastro()" *ngIf="estaCadastrandoOuEditando"></button>
+                    </div>
+                    <div class="ui-toolbar-group-right btn-min-width">
+                        <button pButton pRipple label="Exportar" icon="pi pi-file-excel" (click)="exportar()"></button>
+                    </div>
+                </app-toolbar-buttons>
 
                 <p-panel>
                     <p-header>
                         <i class="pi pi-fw pi-sort-amount-up" style="vertical-align: middle;"></i>
                         <span> Filtro Consulta </span>
                     </p-header>
-                    <div class="ui-g">
-                        <div class="ui-g-12">
-
-                            <div class="ui-g-12">
-                                <span class="md-inputfield">
-                                    <input pInputText type="text" [(ngModel)]="codigoMarca" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="7">
-                                    <label> Código </label>
-                                </span>
+                    <div class="col-12 md:col-12">
+                        <div class="grid formgrid">
+                            <div class="col-12 lg:col-2 lg:mb-0">
+                                <div class="floating-label">
+                                    <input type="text" id="filtroCodigoMarca" pInputText placeholder=" " [(ngModel)]="filtroCodigoMarca" onkeypress="return event.charCode >= 48 && event.charCode <=
+                                         57" (keyup.enter)="pesquisar()" maxlength="7" [disabled]="estaCadastrandoOuEditando">
+                                    <label for="filtroCodigoMarca"> Código </label>
+                                </div>
                             </div>
-
-                            <div class="ui-g-12">
-                                <span class="md-inputfield">
-                                    <input pInputText type="text" [(ngModel)]="codigoMarca" maxlength="100">
-                                    <label> Descrição </label>
-                                </span>
+                            <div class="col-12 lg:col-4 lg:mb-0">
+                                <div class="floating-label">
+                                    <input type="text" id="filtroNomeMarca" pInputText placeholder=" " [(ngModel)]="filtroNomeMarca" uppercase (keyup.enter)="pesquisar()" maxlength="100"/>
+                                    <label for="filtroNomeMarca"> Nome </label>
+                                </div>
                             </div>
-
+                            <div class="col-12 mt-2 lg:col-1 lg:mb-0">
+                                <p-checkbox label="Ativo" [(ngModel)]="filtroIndicadorMarcaAtiva" [binary]="true"></p-checkbox>
+                            </div>
                         </div>
                     </div>
                 </p-panel>
 
-
-
+                <app-dynamic-table
+                    #tabelaMarca
+                    [value]="listaMarcas"
+                    [columns]="colunasTabelaMarca"
+                    [rows]="8">
+                </app-dynamic-table>
             </div>
         </div>
     </div>

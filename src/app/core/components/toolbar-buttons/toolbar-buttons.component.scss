@@ -1,5 +1,9 @@
 :host ::ng-deep button {
     margin-right: .25em;
-    min-width: 133px !important;
-    background-color: black;
+}
+
+.stickyMode {
+    position: sticky;
+    top: 68px;
+    z-index: 1;
 }

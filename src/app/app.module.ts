@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { CommonModule, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { AppComponent } from './app.component';
 import { AppLayoutModule } from './layout/app.layout.module';
 import { NotfoundComponent } from './demo/components/notfound/notfound.component';
@@ -12,10 +12,20 @@ import { NodeService } from './demo/service/node.service';
 import { PhotoService } from './demo/service/photo.service';
 import { RouterModule } from '@angular/router';
 import { AppRotas } from './app.routes';
+import { CoreComponentsModule } from './core/components/core-components.module';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
-    imports: [RouterModule.forRoot(AppRotas), AppLayoutModule],
+    imports: [
+        RouterModule.forRoot(AppRotas),
+        AppLayoutModule,
+        CommonModule,
+        BrowserModule,
+        FormsModule,
+        CoreComponentsModule,
+    ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         CountryService,
