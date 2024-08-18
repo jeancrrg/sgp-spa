@@ -17,6 +17,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { LoadingModule } from './core/components/loading/loading.module';
+import { LoadingService } from './core/components/loading/loading.service';
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
@@ -27,7 +29,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
         BrowserModule,
         FormsModule,
         CoreComponentsModule,
-        ConfirmDialogModule
+        ConfirmDialogModule,
+        LoadingModule
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
@@ -38,7 +41,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
         NodeService,
         PhotoService,
         ProductService,
-        ConfirmationService
+        ConfirmationService,
+        LoadingService
     ],
     bootstrap: [AppComponent],
 })

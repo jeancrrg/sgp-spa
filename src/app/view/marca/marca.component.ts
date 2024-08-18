@@ -5,6 +5,7 @@ import { TablePrimeColumOptions } from 'src/app/core/components/dynamic-table/Ta
 import { ValidationUtils } from 'src/app/core/utils/ValidationUtils.util';
 import { ConfirmacaoDialogDTO } from 'src/app/shared/models/ConfirmacaoDialogDTO.model';
 import { Marca } from 'src/app/shared/models/Marca.model';
+import { ExcelService } from 'src/app/shared/services/excel.service';
 
 @Component({
     selector: 'app-marca',
@@ -42,21 +43,32 @@ export class MarcaComponent implements OnInit {
             codigo: 4,
             nome: 'Mizuno',
             indicadorAtivo: false
+        },
+        {
+            codigo: 5,
+            nome: 'Puma',
+            indicadorAtivo: true
+        },
+        {
+            codigo: 6,
+            nome: 'New Balance',
+            indicadorAtivo: true
         }
     ];
 
     @ViewChild('tabelaMarca') tabelaMarca: DynamicTableComponent;
 
     colunasTabelaMarca: TablePrimeColumOptions[] = [
-        { header: 'Código', field: 'codigo', width: '15%', align: 'center' },
+        { header: 'Código', field: 'codigo', width: '10%', align: 'center' },
         { header: 'Nome', field: 'nome', width: '60%', align: 'center' },
-        { header: 'Ativo', field: 'indicadorAtivo', width: '15%', align: 'center', boolField: true},
+        { header: 'Ativo', field: 'indicadorAtivo', width: '10%', align: 'center', boolField: true},
         { header: '', width: '5%', align: 'center', buttonField: true, iconButton: "pi pi-pencil", command: (Marca) => this.prepararEdicao(Marca), tooltip: "Editar" },
         { header: '', width: '5%', align: 'center', buttonField: true, iconButton: "pi pi-times", command: () => this.abrirDialogConfirmacaoExclusao(), tooltip: "Excluir" }
     ];
 
     constructor(
-        private confirmationService: ConfirmationService
+        private confirmationService: ConfirmationService,
+        private excelService: ExcelService
     ) { }
 
     ngOnInit(): void {
@@ -100,8 +112,29 @@ export class MarcaComponent implements OnInit {
     }
 
     exportar(): void {
-
+        const listaDadosMarcas: any[] = this.atribuirDadosExportacao(this.colunasTabelaMarca, this.listaMarcas)
+        this.excelService.exportarArquivoExcel(listaDadosMarcas, 'relatorio_marcas');
     }
+
+    atribuirDadosExportacao(colunas: TablePrimeColumOptions[], dados: any[]): any[] {
+		return dados.map(dado => {
+			const linha = {};
+
+			colunas.forEach(coluna => {
+				let valor = dado[coluna.field];
+				if (valor !== undefined) {
+					if (coluna.boolField) {
+						valor = valor ? 'SIM' : 'NÃO';
+					}
+				} else {
+					valor = '';
+				}
+				linha[coluna.header] = valor;
+			});
+
+			return linha;
+		});
+	}
 
     abrirDialogConfirmacaoExclusao(): void {
         let dtoConfirmacao = new ConfirmacaoDialogDTO();

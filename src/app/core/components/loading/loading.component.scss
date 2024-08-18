@@ -1,0 +1,105 @@
+div.loading {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 9999;
+
+    opacity: 0;
+    transition: .5s ease-in-out all;
+}
+
+.loading-show {
+    opacity: 1 !important;
+}
+
+.progress .ivc-backdrop {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    background-color: #000000;
+    transform: translate3d(0, 0, 0);
+    opacity: 0.6;
+    transition: all 0.5s cubic-bezier(0.35, 0, 0.25, 1);
+}
+
+.progress div.message {
+    /* margin: 0 auto; */
+    color: #1eaafb;
+    font-size: 3em;
+    /*Ajustes para funcionar no android 4.4*/
+    width: 100%;
+    text-align: center;
+    top: calc(50% + 70px);
+    position: absolute;
+    height: 55px;
+    margin: 0;
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+}
+
+.progress div.spinner {
+    width: 128px;
+    height: 128px;
+    box-sizing: border-box;
+    position: absolute;
+    margin: 0 auto;
+    left: calc(50% - 64px);
+    top: calc(50% - 64px);
+    right: unset;
+    background-image: url("../../../../assets/layout/images/logo-nextgen-system.png");
+    background-position: 50% 50%;
+    background-size: 70%;
+    background-repeat: no-repeat;
+}
+
+.progress div.spinner-icon {
+    width: 128px !important;
+    height: 128px !important;
+    box-sizing: border-box;
+    border: solid 2px transparent;
+    border-top-color: #1eaafb;
+    border-left-color: #1eaafb;
+    border-radius: 50%;
+    -webkit-animation: nprogress-spinner 1500ms linear infinite;
+    animation: nprogress-spinner 1500ms linear infinite;
+}
+
+.progress div.spinner-icon-sub1 {
+    width: 120px !important;
+    height: 120px !important;
+    -webkit-animation: nprogress-spinner 1000ms linear infinite;
+    animation: nprogress-spinner 1000ms linear infinite;
+}
+
+.ivc-zindex-menu {
+    z-index: 60!important;
+}
+
+@-webkit-keyframes nprogress-spinner {
+    to {
+        -webkit-transform: rotate(360deg)
+    }
+}
+
+@keyframes nprogress-spinner {
+    to {
+        transform: rotate(360deg)
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .progress div.spinner {
+        width: 100px;
+        height: 100px;
+        left: calc(50% - 50px);
+        top: calc(50% - 50px);
+    }
+    .progress div.spinner-icon {
+        width: 100px !important;
+        height: 100px !important;
+    }
+}

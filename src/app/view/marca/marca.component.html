@@ -22,25 +22,23 @@
                         <i class="pi pi-fw pi-filter" style="vertical-align: middle;"></i>
                         <span> Filtro Consulta </span>
                     </p-header>
-                    <div class="col-12 md:col-12">
-                        <div class="grid formgrid">
-                            <div class="col-12 lg:col-2 lg:mb-0">
-                                <div class="floating-label">
-                                    <input type="text" id="filtroCodigoMarca" pInputText placeholder=" " [(ngModel)]="filtroCodigoMarca" onkeypress="return event.charCode >= 48 && event.charCode <=
-                                         57" (keyup.enter)="pesquisar()" maxlength="7" [disabled]="estaCadastrandoOuEditando">
-                                    <label for="filtroCodigoMarca"> Código </label>
-                                </div>
+                    <div class="grid formgrid">
+                        <div class="col-12 lg:col-2 lg:mb-0">
+                            <div class="floating-label">
+                                <input type="text" id="filtroCodigoMarca" pInputText placeholder=" " [(ngModel)]="filtroCodigoMarca" onkeypress="return event.charCode >= 48 && event.charCode <=
+                                        57" (keyup.enter)="pesquisar()" maxlength="7" [disabled]="estaCadastrandoOuEditando">
+                                <label for="filtroCodigoMarca"> Código </label>
                             </div>
-                            <div class="col-12 lg:col-4 lg:mb-0">
-                                <div class="floating-label">
-                                    <input type="text" id="filtroNomeMarca" pInputText placeholder=" " [(ngModel)]="filtroNomeMarca" uppercase (keyup.enter)="pesquisar()" maxlength="100"/>
-                                    <label for="filtroNomeMarca"> Nome </label>
-                                </div>
-                                <p-message severity="error" text="Este campo é obrigatório" *ngIf="mostrarMensagemNomeMarcaObrigatoria"></p-message>
+                        </div>
+                        <div class="col-12 lg:col-4 lg:mb-0">
+                            <div class="floating-label">
+                                <input type="text" id="filtroNomeMarca" pInputText placeholder=" " [(ngModel)]="filtroNomeMarca" uppercase (keyup.enter)="pesquisar()" maxlength="100"/>
+                                <label for="filtroNomeMarca"> Nome </label>
                             </div>
-                            <div class="col-12 mt-2 lg:col-1 lg:mb-0">
-                                <p-checkbox label="Ativo" [(ngModel)]="filtroIndicadorMarcaAtiva" [binary]="true"></p-checkbox>
-                            </div>
+                            <p-message severity="error" text="Este campo é obrigatório" *ngIf="mostrarMensagemNomeMarcaObrigatoria"></p-message>
+                        </div>
+                        <div class="col-12 mt-2 lg:col-1 lg:mb-0">
+                            <p-checkbox label="Ativo" [(ngModel)]="filtroIndicadorMarcaAtiva" [binary]="true"></p-checkbox>
                         </div>
                     </div>
                 </p-panel>
@@ -49,7 +47,7 @@
                     #tabelaMarca
                     [value]="listaMarcas"
                     [columns]="colunasTabelaMarca"
-                    [rows]="8">
+                    [rows]="6">
                 </app-dynamic-table>
             </div>
         </div>
