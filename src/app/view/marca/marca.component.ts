@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DynamicTableComponent } from 'src/app/core/components/dynamic-table/dynamic-table.component';
 import { TablePrimeColumOptions } from 'src/app/core/components/dynamic-table/TablePrimeColumOptions';
+import { ValidationUtils } from 'src/app/core/utils/ValidationUtils.util';
+import { ConfirmacaoDialogDTO } from 'src/app/shared/models/ConfirmacaoDialogDTO.model';
 import { Marca } from 'src/app/shared/models/Marca.model';
 
 @Component({
@@ -18,6 +20,7 @@ export class MarcaComponent implements OnInit {
     filtroIndicadorMarcaAtiva: boolean = true;
 
     estaCadastrandoOuEditando: boolean = false;
+    mostrarMensagemNomeMarcaObrigatoria: boolean = false;
 
     listaMarcas: Marca[] = [
         {
@@ -49,12 +52,12 @@ export class MarcaComponent implements OnInit {
         { header: 'Nome', field: 'nome', width: '60%', align: 'center' },
         { header: 'Ativo', field: 'indicadorAtivo', width: '15%', align: 'center', boolField: true},
         { header: '', width: '5%', align: 'center', buttonField: true, iconButton: "pi pi-pencil", command: (Marca) => this.prepararEdicao(Marca), tooltip: "Editar" },
-        { header: '', width: '5%', align: 'center', buttonField: true, iconButton: "pi pi-times", command: (Marca) => this.prepararExclusao(Marca), tooltip: "Excluir" }
+        { header: '', width: '5%', align: 'center', buttonField: true, iconButton: "pi pi-times", command: () => this.abrirDialogConfirmacaoExclusao(), tooltip: "Excluir" }
     ];
 
-    constructor() {
-
-    }
+    constructor(
+        private confirmationService: ConfirmationService
+    ) { }
 
     ngOnInit(): void {
         this.itemsBreadCrumb.push({ icon: 'pi pi-home', routerLink: ['/']});
@@ -84,7 +87,9 @@ export class MarcaComponent implements OnInit {
     }
 
     salvar(): void {
-
+        if (!ValidationUtils.stringNotEmpty(this.filtroNomeMarca)) {
+            this.mostrarMensagemNomeMarcaObrigatoria = true;
+        }
     }
 
     prepararEdicao(marca: Marca): void {
@@ -94,12 +99,18 @@ export class MarcaComponent implements OnInit {
         this.filtroIndicadorMarcaAtiva = marca.indicadorAtivo;
     }
 
-    prepararExclusao(marca: Marca): void {
+    exportar(): void {
 
     }
 
-    exportar(): void {
-
+    abrirDialogConfirmacaoExclusao(): void {
+        let dtoConfirmacao = new ConfirmacaoDialogDTO();
+        dtoConfirmacao.key = 'dialogConfirmacaoExclusao';
+        dtoConfirmacao.message = 'Deseja realmente excluir essa marca?';
+        dtoConfirmacao.accept = () => {
+            alert('Ação confirmada!');
+        }
+		this.confirmationService.confirm(dtoConfirmacao);
     }
 
 }

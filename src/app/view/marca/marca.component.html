@@ -19,7 +19,7 @@
 
                 <p-panel>
                     <p-header>
-                        <i class="pi pi-fw pi-sort-amount-up" style="vertical-align: middle;"></i>
+                        <i class="pi pi-fw pi-filter" style="vertical-align: middle;"></i>
                         <span> Filtro Consulta </span>
                     </p-header>
                     <div class="col-12 md:col-12">
@@ -36,6 +36,7 @@
                                     <input type="text" id="filtroNomeMarca" pInputText placeholder=" " [(ngModel)]="filtroNomeMarca" uppercase (keyup.enter)="pesquisar()" maxlength="100"/>
                                     <label for="filtroNomeMarca"> Nome </label>
                                 </div>
+                                <p-message severity="error" text="Este campo é obrigatório" *ngIf="mostrarMensagemNomeMarcaObrigatoria"></p-message>
                             </div>
                             <div class="col-12 mt-2 lg:col-1 lg:mb-0">
                                 <p-checkbox label="Ativo" [(ngModel)]="filtroIndicadorMarcaAtiva" [binary]="true"></p-checkbox>
@@ -54,3 +55,10 @@
         </div>
     </div>
 </div>
+
+<p-confirmDialog
+    key="dialogConfirmacaoExclusao"
+    [style]="{width: '350px'}"
+    acceptButtonStyleClass="p-button-text"
+    rejectButtonStyleClass="p-button-text">
+</p-confirmDialog>

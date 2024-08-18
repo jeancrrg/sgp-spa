@@ -15,6 +15,8 @@ import { AppRotas } from './app.routes';
 import { CoreComponentsModule } from './core/components/core-components.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
@@ -25,6 +27,7 @@ import { FormsModule } from '@angular/forms';
         BrowserModule,
         FormsModule,
         CoreComponentsModule,
+        ConfirmDialogModule
     ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
@@ -35,6 +38,7 @@ import { FormsModule } from '@angular/forms';
         NodeService,
         PhotoService,
         ProductService,
+        ConfirmationService
     ],
     bootstrap: [AppComponent],
 })

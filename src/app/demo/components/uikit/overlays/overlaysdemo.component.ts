@@ -54,7 +54,12 @@ export class OverlaysDemoComponent implements OnInit {
     confirm1() {
         this.confirmationService.confirm({
             key: 'confirm1',
-            message: 'Are you sure to perform this action?'
+            message: 'Are you sure to perform this action?',
+            acceptIcon: 'pi pi-search',
+            acceptLabel: 'SIM',
+            accept: () => {
+                alert('Deu certo!');
+            }
         });
     }
 
@@ -76,5 +81,5 @@ export class OverlaysDemoComponent implements OnInit {
     formatCurrency(value: number) {
         return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     }
-    
+
 }

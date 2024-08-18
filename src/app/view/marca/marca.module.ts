@@ -12,6 +12,8 @@ import { ToolbarButtonsModule } from "src/app/core/components/toolbar-buttons/to
 import { PrimengCustomModule } from "src/app/shared/modules/primeng-custom.module";
 import { DynamicTableModule } from "src/app/core/components/dynamic-table/dynamic-table.module";
 import { CoreDirectivesModule } from "src/app/shared/directives/core-directives.module";
+import { DialogModule } from "primeng/dialog";
+import { ConfirmDialogModule } from "primeng/confirmdialog";
 
 @NgModule({
     declarations: [MarcaComponent],
@@ -26,6 +28,8 @@ import { CoreDirectivesModule } from "src/app/shared/directives/core-directives.
         DynamicTableModule,
         PrimengCustomModule,
         CoreDirectivesModule,
+        DialogModule,
+        ConfirmDialogModule,
         RouterModule.forChild(MarcaRotas)
     ]
 })
