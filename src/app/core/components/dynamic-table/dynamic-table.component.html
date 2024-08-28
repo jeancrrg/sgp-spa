@@ -70,7 +70,7 @@
                     <!-- COLUNA DE BOTÃO
                     <span *ngIf="col.buttonField && hasPermission(col.isUserInRule)" [pTooltip]="col.tooltip"> -->
                     <span *ngIf="col.buttonField" [pTooltip]="col.tooltip">
-                        <button pButton [icon]="'ui-icon-' + col.iconButton" (click)="col.command(rowData)"></button>
+                        <button pButton [icon]="col.iconButton" (click)="col.command(rowData)"></button>
                     </span>
                 </td>
             </tr>

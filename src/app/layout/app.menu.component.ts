@@ -24,7 +24,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'CADASTRO',
                 items: [
-                    { label: 'Produto', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['/uikit/formlayout'] },
+                    { label: 'Produto', icon: 'edit', routerLink: ['/uikit/formlayout'] },
                     { label: 'Estoque', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/formlayout'] },
                     { label: 'Preço', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/formlayout'] },
                     { label: 'Imagem', icon: 'pi pi-fw pi-image', routerLink: ['/uikit/formlayout'] },
