@@ -38,7 +38,7 @@
                             <p-message severity="error" text="Este campo é obrigatório" *ngIf="mostrarMensagemNomeMarcaObrigatoria"></p-message>
                         </div>
                         <div class="col-12 mt-2 lg:col-1 lg:mb-0">
-                            <p-checkbox label="Ativo" [(ngModel)]="filtroIndicadorMarcaAtiva" [binary]="true"></p-checkbox>
+                            <p-checkbox label="Ativo" [(ngModel)]="filtroIndicadorMarcaAtiva" [binary]="true" [disabled]="estaCadastrandoOuEditando"></p-checkbox>
                         </div>
                     </div>
                 </p-panel>

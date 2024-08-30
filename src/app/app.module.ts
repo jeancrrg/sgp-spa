@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { CommonModule, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { AppComponent } from './app.component';
 import { AppLayoutModule } from './layout/app.layout.module';
@@ -15,10 +15,19 @@ import { AppRotas } from './app.routes';
 import { CoreComponentsModule } from './core/components/core-components.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { LoadingModule } from './core/components/loading/loading.module';
 import { LoadingService } from './core/components/loading/loading.service';
+import { RequisicaoHttpService } from './core/service/requisicaoHttp.service';
+import { NotificacaoService } from './core/service/notificacao.service';
+import { environment } from 'src/environments/environment';
+import { ConfiguracaoService } from './core/service/configuracao.service';
+import { ConfiguracaoAuxiliarService } from './core/service/configuracao.auxiliar.service';
+
+export function configServiceCreator(configuracaoService: ConfiguracaoService) {
+    return () => configuracaoService.load(environment.config_file);
+}
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
@@ -33,6 +42,7 @@ import { LoadingService } from './core/components/loading/loading.service';
         LoadingModule
     ],
     providers: [
+        { provide: APP_INITIALIZER, useFactory: configServiceCreator, deps: [ ConfiguracaoService ], multi: true },
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         CountryService,
         CustomerService,
@@ -42,7 +52,12 @@ import { LoadingService } from './core/components/loading/loading.service';
         PhotoService,
         ProductService,
         ConfirmationService,
-        LoadingService
+        LoadingService,
+        RequisicaoHttpService,
+        NotificacaoService,
+        MessageService,
+        ConfiguracaoAuxiliarService,
+        ConfiguracaoService
     ],
     bootstrap: [AppComponent],
 })

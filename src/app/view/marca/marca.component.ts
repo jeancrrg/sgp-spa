@@ -1,7 +1,9 @@
+import { MarcaService } from './../../shared/services/marca.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DynamicTableComponent } from 'src/app/core/components/dynamic-table/dynamic-table.component';
 import { TablePrimeColumOptions } from 'src/app/core/components/dynamic-table/TablePrimeColumOptions';
+import { NotificacaoService } from 'src/app/core/service/notificacao.service';
 import { ValidationUtils } from 'src/app/core/utils/ValidationUtils.util';
 import { ConfirmacaoDialogDTO } from 'src/app/shared/models/ConfirmacaoDialogDTO.model';
 import { Marca } from 'src/app/shared/models/Marca.model';
@@ -23,38 +25,7 @@ export class MarcaComponent implements OnInit {
     estaCadastrandoOuEditando: boolean = false;
     mostrarMensagemNomeMarcaObrigatoria: boolean = false;
 
-    listaMarcas: Marca[] = [
-        {
-            codigo: 1,
-            nome: 'Nike',
-            indicadorAtivo: true
-        },
-        {
-            codigo: 2,
-            nome: 'Adidas',
-            indicadorAtivo: false
-        },
-        {
-            codigo: 3,
-            nome: 'Vans',
-            indicadorAtivo: true
-        },
-        {
-            codigo: 4,
-            nome: 'Mizuno',
-            indicadorAtivo: false
-        },
-        {
-            codigo: 5,
-            nome: 'Puma',
-            indicadorAtivo: true
-        },
-        {
-            codigo: 6,
-            nome: 'New Balance',
-            indicadorAtivo: true
-        }
-    ];
+    listaMarcas: Marca[] = [];
 
     @ViewChild('tabelaMarca') tabelaMarca: DynamicTableComponent;
 
@@ -63,12 +34,14 @@ export class MarcaComponent implements OnInit {
         { header: 'Nome', field: 'nome', width: '60%', align: 'center' },
         { header: 'Ativo', field: 'indicadorAtivo', width: '10%', align: 'center', boolField: true},
         { header: '', width: '5%', align: 'center', buttonField: true, iconButton: "pi pi-pencil", command: (Marca) => this.prepararEdicao(Marca), tooltip: "Editar" },
-        { header: '', width: '5%', align: 'center', buttonField: true, iconButton: "pi pi-times", command: () => this.abrirDialogConfirmacaoExclusao(), tooltip: "Excluir" }
+        { header: '', width: '5%', align: 'center', buttonField: true, iconButton: "pi pi-times", command: () => this.abrirDialogConfirmacaoExclusao(), tooltip: "Inativar" }
     ];
 
     constructor(
         private confirmationService: ConfirmationService,
-        private excelService: ExcelService
+        private notificaoService: NotificacaoService,
+        private excelService: ExcelService,
+        private marcaService: MarcaService
     ) { }
 
     ngOnInit(): void {
@@ -78,7 +51,17 @@ export class MarcaComponent implements OnInit {
     }
 
     pesquisar(): void {
-        alert('Código: ' + this.filtroCodigoMarca + ' - Nome: ' + this.filtroNomeMarca + ' - Ativo: ' + this.filtroIndicadorMarcaAtiva);
+        this.marcaService.buscar(this.filtroCodigoMarca, this.filtroNomeMarca, this.filtroIndicadorMarcaAtiva, true).subscribe(
+			response => {
+				this.listaMarcas = [...response];
+				if (!ValidationUtils.isNotUndefinedAndNotNull(this.listaMarcas) || this.listaMarcas.length == 0) {
+					this.notificaoService.informacao('Nenhuma marca encontrada!', false, 'INFORMAÇÃO', undefined, 10);
+				}
+			},
+			error => {
+				this.notificaoService.erro(error.error, 'ERRO', false, undefined, 10);
+			}
+		);
     }
 
     limparFiltros(): void {
