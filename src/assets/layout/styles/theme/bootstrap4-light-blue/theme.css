@@ -1113,7 +1113,7 @@
         padding: 0.75rem 1.5rem;
         border-bottom: 1px solid #dee2e6;
         color: #212529;
-        background: #efefef;
+        background: var(--primary-color);
         margin: 0;
         border-top-right-radius: 4px;
         border-top-left-radius: 4px;
@@ -1374,6 +1374,7 @@
         left: 0.75rem;
         color: #6c757d;
         transition-duration: 0.15s;
+        font-size: 13px !important;
     }
 
     .p-float-label > .ng-invalid.ng-dirty + label {
@@ -6955,18 +6956,18 @@
         box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
     }
     .p-toast .p-toast-message.p-toast-message-info {
-        background: #cce5ff;
-        border: solid #b8daff;
+        background: #3bb7f3;
+        border: solid #3bb7f3;
         border-width: 1px;
-        color: #004085;
+        color: #002c5c;
     }
     .p-toast .p-toast-message.p-toast-message-info .p-toast-message-icon,
     .p-toast .p-toast-message.p-toast-message-info .p-toast-icon-close {
-        color: #004085;
+        color: #002c5c;
     }
     .p-toast .p-toast-message.p-toast-message-success {
-        background: #d4edda;
-        border: solid #c3e6cb;
+        background: #6ff48f;
+        border: solid #6ff48f;
         border-width: 1px;
         color: #155724;
     }
@@ -6975,24 +6976,24 @@
         color: #155724;
     }
     .p-toast .p-toast-message.p-toast-message-warn {
-        background: #fff3cd;
-        border: solid #ffeeba;
+        background: #f7d15a;
+        border: solid #f7d15a;
         border-width: 1px;
-        color: #856404;
+        color: #775800;
     }
     .p-toast .p-toast-message.p-toast-message-warn .p-toast-message-icon,
     .p-toast .p-toast-message.p-toast-message-warn .p-toast-icon-close {
-        color: #856404;
+        color: #775800;
     }
     .p-toast .p-toast-message.p-toast-message-error {
-        background: #f8d7da;
-        border: solid #f5c6cb;
+        background: #f76f7b;
+        border: solid #f76f7b;
         border-width: 1px;
-        color: #721c24;
+        color: #71010b;
     }
     .p-toast .p-toast-message.p-toast-message-error .p-toast-message-icon,
     .p-toast .p-toast-message.p-toast-message-error .p-toast-icon-close {
-        color: #721c24;
+        color: #71010b;
     }
 
     .p-galleria .p-galleria-close {

@@ -24,6 +24,7 @@ import { NotificacaoService } from './core/service/notificacao.service';
 import { environment } from 'src/environments/environment';
 import { ConfiguracaoService } from './core/service/configuracao.service';
 import { ConfiguracaoAuxiliarService } from './core/service/configuracao.auxiliar.service';
+import { ToastModule } from 'primeng/toast';
 
 export function configServiceCreator(configuracaoService: ConfiguracaoService) {
     return () => configuracaoService.load(environment.config_file);
@@ -39,7 +40,8 @@ export function configServiceCreator(configuracaoService: ConfiguracaoService) {
         FormsModule,
         CoreComponentsModule,
         ConfirmDialogModule,
-        LoadingModule
+        LoadingModule,
+        ToastModule
     ],
     providers: [
         { provide: APP_INITIALIZER, useFactory: configServiceCreator, deps: [ ConfiguracaoService ], multi: true },

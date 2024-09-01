@@ -124,11 +124,6 @@ export class DynamicTableComponent implements OnInit {
         return value;
     }
 
-    /*
-    hasPermission(permission: string) {
-        return this.authorityService.possuiPermissao(permission || '');
-    }*/
-
     stringNotEmpty(value) {
         return ValidationUtils.stringNotEmpty(value);
     }

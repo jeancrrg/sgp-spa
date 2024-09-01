@@ -24,18 +24,17 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'CADASTRO',
                 items: [
-                    { label: 'Produto', icon: 'edit', routerLink: ['/uikit/formlayout'] },
+                    { label: 'Produto', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['/uikit/formlayout'] },
                     { label: 'Imagem', icon: 'pi pi-fw pi-image', routerLink: ['/uikit/formlayout'] },
                     { label: 'Marca', icon: 'pi pi-fw pi-tag', routerLink: ['/marca'] },
-                    { label: 'Categoria', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/formlayout'] },
-                    { label: 'Departamento', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/formlayout'] }
+                    { label: 'Departamento', icon: 'pi pi-fw pi-envelope', routerLink: ['/departamento'] },
+                    { label: 'Categoria', icon: 'pi pi-fw pi-bookmark', routerLink: ['/categoria'] }
                 ]
             },
             {
                 label: 'OPERAÇÃO',
                 items: [
-                    { label: 'Associar Categoria', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/formlayout'] },
-                    { label: 'Importar em Lote', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/formlayout'] }
+                    { label: 'Importar em Lote', icon: 'pi pi-fw pi-upload', routerLink: ['/uikit/formlayout'] }
                 ]
             },
             {
