@@ -1,5 +1,5 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
-import { CommonModule, LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { CommonModule, DatePipe, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { AppComponent } from './app.component';
 import { AppLayoutModule } from './layout/app.layout.module';
 import { NotfoundComponent } from './demo/components/notfound/notfound.component';
@@ -46,6 +46,7 @@ export function configServiceCreator(configuracaoService: ConfiguracaoService) {
     providers: [
         { provide: APP_INITIALIZER, useFactory: configServiceCreator, deps: [ ConfiguracaoService ], multi: true },
         { provide: LocationStrategy, useClass: PathLocationStrategy },
+        DatePipe,
         CountryService,
         CustomerService,
         EventService,

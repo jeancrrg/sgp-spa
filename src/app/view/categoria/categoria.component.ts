@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItem, SelectItem } from 'primeng/api';
 import { catchError, of, tap } from 'rxjs';
@@ -32,11 +33,12 @@ export class CategoriaComponent implements OnInit {
     @ViewChild('tabelaCategoria') tabelaCategoria: DynamicTableComponent;
 
     colunasTabelaCategoria: TablePrimeColumOptions[] = [
-        { header: 'Código', field: 'codigo', width: '15%', align: 'center' },
+        { header: 'Código', field: 'codigo', width: '10%', align: 'center' },
         { header: 'Nome', field: 'nome', width: '25%', align: 'center' },
-        { header: 'Cód. Departamento', field: 'departamento.codigo', width: '15%', align: 'center'},
+        { header: 'Cód. Departamento', field: 'departamento.codigo', width: '10%', align: 'center'},
         { header: 'Departamento', field: 'departamento.nome', width: '25%', align: 'center'},
         { header: 'Ativo', field: 'indicadorAtivo', width: '10%', align: 'center', boolField: true},
+        { header: 'Última Alteração', field: 'dataUltimaAlteracao', dateField: true, datePipe: 'dd/MM/yyyy HH:mm', width: '15%', align: 'center' },
         { header: '', width: '5%', align: 'center', buttonField: true, iconButton: "pi pi-pencil", command: (categoria) =>
             this.habilitarEdicao(categoria), tooltip: "Editar" },
         { header: '', width: '5%', align: 'center', buttonField: true, iconButton: "pi pi-times", command: (categoria) =>
@@ -44,6 +46,7 @@ export class CategoriaComponent implements OnInit {
     ];
 
     constructor(
+        private datePipe: DatePipe,
         private confirmationService: ConfirmationService,
         private notificaoService: NotificacaoService,
         private excelService: ExcelService,
@@ -121,6 +124,7 @@ export class CategoriaComponent implements OnInit {
         this.filtroCodigoCategoria = categoria.codigo;
         this.filtroNomeCategoria = categoria.nome;
         this.filtroIndicadorCategoriaAtivo = categoria.indicadorAtivo;
+        this.filtroDepartamento = categoria.departamento;
         this.listaCategorias = [];
     }
 
@@ -135,11 +139,16 @@ export class CategoriaComponent implements OnInit {
             this.notificaoService.aviso('Nome da categoria não encontrado! Informe o nome!', undefined, false, 10);
             return;
         }
+        if (!ValidationUtils.isNotUndefinedAndNotNull(this.filtroDepartamento)) {
+            this.notificaoService.aviso('Departamento não encontrado! Informe o departamento!', undefined, false, 10);
+            return;
+        }
 
         let categoria: Categoria = new Categoria();
         categoria.codigo = this.estaEditando ? this.filtroCodigoCategoria : undefined;
         categoria.nome = this.filtroNomeCategoria;
         categoria.indicadorAtivo = this.filtroIndicadorCategoriaAtivo;
+        categoria.departamento = this.filtroDepartamento;
 
         if (this.estaCadastrando) {
             this.cadastrarcategoria(categoria);
@@ -157,7 +166,7 @@ export class CategoriaComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificaoService.sucesso('Categoria ' + categoriaSalvo.nome + ' cadastrada com sucesso!', undefined, false, 10);
+                this.notificaoService.sucesso('Categoria: ' + categoriaSalvo.nome + ' cadastrada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
                 this.notificaoService.erro(error.error, undefined, false, 10);
@@ -175,7 +184,7 @@ export class CategoriaComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificaoService.sucesso('Categoria ' + categoriaSalvo.nome + ' atualizada com sucesso!', undefined, false, 10);
+                this.notificaoService.sucesso('Categoria: ' + categoriaSalvo.nome + ' atualizada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
                 this.notificaoService.erro(error.error, undefined, false, 10);
@@ -194,11 +203,15 @@ export class CategoriaComponent implements OnInit {
 			const linha = {};
 
 			colunas.forEach(coluna => {
-				let valor = dado[coluna.field];
+				let valor = this.getValorCampoAninhado(dado, coluna.field);
+
 				if (valor !== undefined) {
 					if (coluna.boolField) {
 						valor = valor ? 'SIM' : 'NÃO';
 					}
+                    if (coluna.dateField) {
+                        valor = this.datePipe.transform(valor, 'dd/MM/yyyy HH:mm');
+                    }
 				} else {
 					valor = '';
 				}
@@ -208,6 +221,14 @@ export class CategoriaComponent implements OnInit {
 			return linha;
 		});
 	}
+
+    getValorCampoAninhado(obj: any, caminho: string): any {
+        if (ValidationUtils.isNotUndefinedAndNotNull(caminho)) {
+            return caminho.split('.').reduce((acumulador, parte) => acumulador && acumulador[parte], obj);
+        } else {
+            return undefined;
+        }
+    }
 
     abrirDialogConfirmacaoInativacao(categoria: Categoria): void {
         let dtoConfirmacao = new ConfirmacaoDialogDTO();
@@ -227,7 +248,7 @@ export class CategoriaComponent implements OnInit {
         this.categoriaService.inativar(categoria.codigo, true).pipe(
             tap(() => {
                 this.pesquisar();
-                this.notificaoService.sucesso('Categoria ' + categoria.nome + ' inativada com sucesso!', undefined, false, 10);
+                this.notificaoService.sucesso('Categoria: ' + categoria.nome + ' inativada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
                 this.notificaoService.erro(error.error, undefined, false, 10);

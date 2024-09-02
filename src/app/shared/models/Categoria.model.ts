@@ -5,4 +5,5 @@ export class Categoria {
     nome: string;
     indicadorAtivo: boolean;
     departamento: Departamento;
+    dataUltimaAlteracao: Date;
 }

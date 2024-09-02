@@ -26,13 +26,13 @@
                         <div class="col-12 lg:col-2 lg:mb-0">
                             <div class="floating-label">
                                 <input type="text" id="filtroCodigoDepartamento" pInputText placeholder=" " [(ngModel)]="filtroCodigoDepartamento" onkeypress="return event.charCode >= 48
-                                    && event.charCode <= 57" (keyup.enter)="pesquisar()" maxlength="10" [disabled]="estaCadastrando || estaEditando">
+                                    && event.charCode <= 57" maxlength="10" [disabled]="estaCadastrando || estaEditando">
                                 <label for="filtroCodigoDepartamento"> Código </label>
                             </div>
                         </div>
                         <div class="col-12 lg:col-3 lg:mb-0">
                             <div class="floating-label">
-                                <input type="text" id="filtroNomeDepartamento" pInputText placeholder=" " [(ngModel)]="filtroNomeDepartamento" uppercase (keyup.enter)="pesquisar()" maxlength="50"/>
+                                <input type="text" id="filtroNomeDepartamento" pInputText placeholder=" " [(ngModel)]="filtroNomeDepartamento" uppercase maxlength="50"/>
                                 <label for="filtroNomeDepartamento"> Nome </label>
                             </div>
                         </div>

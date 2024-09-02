@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { MarcaService } from './../../shared/services/marca.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItem } from 'primeng/api';
@@ -29,8 +30,9 @@ export class MarcaComponent implements OnInit {
 
     colunasTabelaMarca: TablePrimeColumOptions[] = [
         { header: 'Código', field: 'codigo', width: '10%', align: 'center' },
-        { header: 'Nome', field: 'nome', width: '60%', align: 'center' },
+        { header: 'Nome', field: 'nome', align: 'center' },
         { header: 'Ativo', field: 'indicadorAtivo', width: '10%', align: 'center', boolField: true},
+        { header: 'Última Alteração', field: 'dataUltimaAlteracao', dateField: true, datePipe: 'dd/MM/yyyy HH:mm', width: '15%', align: 'center' },
         { header: '', width: '5%', align: 'center', buttonField: true, iconButton: "pi pi-pencil", command: (Marca) =>
             this.habilitarEdicao(Marca), tooltip: "Editar" },
         { header: '', width: '5%', align: 'center', buttonField: true, iconButton: "pi pi-times", command: (Marca) =>
@@ -38,6 +40,7 @@ export class MarcaComponent implements OnInit {
     ];
 
     constructor(
+        private datePipe: DatePipe,
         private confirmationService: ConfirmationService,
         private notificaoService: NotificacaoService,
         private excelService: ExcelService,
@@ -123,7 +126,7 @@ export class MarcaComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificaoService.sucesso('Marca ' + marcaSalva.nome + ' cadastrada com sucesso!', undefined, false, 10);
+                this.notificaoService.sucesso('Marca: ' + marcaSalva.nome + ' cadastrada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
                 this.notificaoService.erro(error.error, undefined, false, 10);
@@ -141,7 +144,7 @@ export class MarcaComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificaoService.sucesso('Marca ' + marcaSalva.nome + ' atualizada com sucesso!', undefined, false, 10);
+                this.notificaoService.sucesso('Marca: ' + marcaSalva.nome + ' atualizada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
                 this.notificaoService.erro(error.error, undefined, false, 10);
@@ -165,6 +168,9 @@ export class MarcaComponent implements OnInit {
 					if (coluna.boolField) {
 						valor = valor ? 'SIM' : 'NÃO';
 					}
+                    if (coluna.dateField) {
+                        valor = this.datePipe.transform(valor, 'dd/MM/yyyy HH:mm');
+                    }
 				} else {
 					valor = '';
 				}
@@ -193,7 +199,7 @@ export class MarcaComponent implements OnInit {
         this.marcaService.inativar(marca.codigo, true).pipe(
             tap(() => {
                 this.pesquisar();
-                this.notificaoService.sucesso('Marca ' + marca.nome + ' inativada com sucesso!', undefined, false, 10);
+                this.notificaoService.sucesso('Marca: ' + marca.nome + ' inativada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
                 this.notificaoService.erro(error.error, undefined, false, 10);
