@@ -7,9 +7,9 @@ import { DynamicTableComponent } from 'src/app/core/components/dynamic-table/dyn
 import { TablePrimeColumOptions } from 'src/app/core/components/dynamic-table/TablePrimeColumOptions';
 import { NotificacaoService } from 'src/app/core/service/notificacao.service';
 import { ValidationUtils } from 'src/app/core/utils/ValidationUtils.util';
-import { ConfirmacaoDialogDTO } from 'src/app/shared/models/ConfirmacaoDialogDTO.model';
-import { Marca } from 'src/app/shared/models/Marca.model';
+import { Marca } from 'src/app/shared/models/cadastro/Marca.model';
 import { ExcelService } from 'src/app/shared/services/excel.service';
+import { ConfirmacaoDialogDTO } from 'src/app/shared/models/dto/ConfirmacaoDialogDTO.model';
 
 @Component({
     selector: 'app-marca',
@@ -42,7 +42,7 @@ export class MarcaComponent implements OnInit {
     constructor(
         private datePipe: DatePipe,
         private confirmationService: ConfirmationService,
-        private notificaoService: NotificacaoService,
+        private notificadoService: NotificacaoService,
         private excelService: ExcelService,
         private marcaService: MarcaService
     ) { }
@@ -60,12 +60,12 @@ export class MarcaComponent implements OnInit {
             tap((response) => {
                 this.listaMarcas = [...response];
 				if (!ValidationUtils.isNotUndefinedAndNotNull(this.listaMarcas) || this.listaMarcas.length == 0) {
-					this.notificaoService.informacao('Nenhuma marca encontrada!', undefined, false, 10);
+					this.notificadoService.informacao('Nenhuma marca encontrada!', undefined, false, 10);
 				}
                 this.listaMarcas = [...this.listaMarcas];
             }),
             catchError((error) => {
-                this.notificaoService.erro(error.error, undefined, false, 10);
+                this.notificadoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();
@@ -101,7 +101,7 @@ export class MarcaComponent implements OnInit {
 
     salvar(): void {
         if (!ValidationUtils.stringNotEmpty(this.filtroNomeMarca)) {
-            this.notificaoService.aviso('Nome da marca não encontrado! Informe o nome!', undefined, false, 10);
+            this.notificadoService.aviso('Nome da marca não encontrado! Informe o nome!', undefined, false, 10);
             return;
         }
 
@@ -126,10 +126,10 @@ export class MarcaComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificaoService.sucesso('Marca: ' + marcaSalva.nome + ' cadastrada com sucesso!', undefined, false, 10);
+                this.notificadoService.sucesso('Marca: ' + marcaSalva.nome + ' cadastrada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
-                this.notificaoService.erro(error.error, undefined, false, 10);
+                this.notificadoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();
@@ -144,16 +144,16 @@ export class MarcaComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificaoService.sucesso('Marca: ' + marcaSalva.nome + ' atualizada com sucesso!', undefined, false, 10);
+                this.notificadoService.sucesso('Marca: ' + marcaSalva.nome + ' atualizada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
-                this.notificaoService.erro(error.error, undefined, false, 10);
+                this.notificadoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();
     }
 
-    exportar(): void {
+    exportarExcel(): void {
         const listaDadosMarcas: any[] = this.atribuirDadosExportacao(this.colunasTabelaMarca, this.listaMarcas)
         this.excelService.exportarArquivoExcel(listaDadosMarcas, 'relatorio_marcas');
     }
@@ -193,16 +193,16 @@ export class MarcaComponent implements OnInit {
 
     inativar(marca: Marca): void {
         if (!marca.indicadorAtivo) {
-            this.notificaoService.aviso('Não é possível inativar pois essa marca já está inativa!', undefined, false, 10);
+            this.notificadoService.aviso('Não é possível inativar pois essa marca já está inativa!', undefined, false, 10);
             return;
         }
         this.marcaService.inativar(marca.codigo, true).pipe(
             tap(() => {
                 this.pesquisar();
-                this.notificaoService.sucesso('Marca: ' + marca.nome + ' inativada com sucesso!', undefined, false, 10);
+                this.notificadoService.sucesso('Marca: ' + marca.nome + ' inativada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
-                this.notificaoService.erro(error.error, undefined, false, 10);
+                this.notificadoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();

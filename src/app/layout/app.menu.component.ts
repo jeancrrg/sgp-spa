@@ -1,7 +1,6 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { LayoutService } from './service/app.layout.service';
-import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-menu',
@@ -24,8 +23,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'CADASTRO',
                 items: [
-                    { label: 'Produto', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['/uikit/formlayout'] },
-                    { label: 'Imagem', icon: 'pi pi-fw pi-image', routerLink: ['/uikit/formlayout'] },
+                    { label: 'Produto', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['/produto/resumo'] },
                     { label: 'Marca', icon: 'pi pi-fw pi-tag', routerLink: ['/marca'] },
                     { label: 'Departamento', icon: 'pi pi-fw pi-envelope', routerLink: ['/departamento'] },
                     { label: 'Categoria', icon: 'pi pi-fw pi-bookmark', routerLink: ['/categoria'] }

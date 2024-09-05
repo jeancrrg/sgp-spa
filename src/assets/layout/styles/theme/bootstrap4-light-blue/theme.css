@@ -357,7 +357,7 @@
     }
 
     .pi {
-        font-size: 1rem;
+        font-size: 1.2rem;
     }
 
     .p-icon {
@@ -4599,10 +4599,10 @@
         border-radius: 4px;
     }
     .p-fieldset .p-fieldset-legend {
-        padding: 1rem 1.25rem;
-        border: 1px solid #dee2e6;
+        padding: 0.5rem 1rem;
+        /*border: 1px solid #dee2e6;*/
         color: #212529;
-        background: #efefef;
+        /*background: #efefef;*/
         font-weight: 600;
         border-radius: 4px;
     }
@@ -4727,26 +4727,33 @@
         scroll-padding-inline: 2.357rem;
     }
     .p-tabview .p-tabview-nav {
-        background: transparent;
+        background: #4B4B4B;
         border: 1px solid #dee2e6;
         border-width: 0 0 1px 0;
+        border-radius: 4px 4px 0 0;
     }
     .p-tabview .p-tabview-nav li {
         margin-right: 0;
     }
     .p-tabview .p-tabview-nav li .p-tabview-nav-link {
-        border: solid;
+        /*border: solid;*/
         border-width: 1px;
-        border-color: #ffffff #ffffff #dee2e6 #ffffff;
-        background: #ffffff;
-        color: #6c757d;
+        border-color: #4B4B4B #4B4B4B #4B4B4B #4B4B4B;
+        background: #4B4B4B;
+        color: #ffffff !important;
         padding: 0.75rem 1rem;
         font-weight: 600;
         border-top-right-radius: 4px;
         border-top-left-radius: 4px;
         transition: box-shadow 0.15s;
-        margin: 0 0 -1px 0;
+        /*margin: 0 0 -1px 0;*/
     }
+
+    .p-tabview {
+        border: 1px solid var(--surface-border);
+        border-radius: 4px;
+    }
+
     .p-tabview
         .p-tabview-nav
         li
@@ -4759,17 +4766,18 @@
         .p-tabview-nav
         li:not(.p-highlight):not(.p-disabled):hover
         .p-tabview-nav-link {
-        background: #ffffff;
+        background: var(--primary-color);
         border-color: #dee2e6;
         color: #6c757d;
     }
     .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
-        background: #ffffff;
+        background: var(--primary-color);
         border-color: #dee2e6 #dee2e6 #ffffff #dee2e6;
-        color: #495057;
+        color: #ffffff !important;
     }
     .p-tabview .p-tabview-left-icon {
         margin-right: 0.5rem;
+        color: #ffffff;
     }
     .p-tabview .p-tabview-right-icon {
         margin-left: 0.5rem;

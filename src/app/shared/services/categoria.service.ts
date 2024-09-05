@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { ConfiguracaoAuxiliarService } from "src/app/core/service/configuracao.auxiliar.service";
 import { RequisicaoHttpService } from "src/app/core/service/requisicaoHttp.service";
-import { Categoria } from "../models/Categoria.model";
+import { Categoria } from "../models/cadastro/Categoria.model";
 import { ValidationUtils } from "src/app/core/utils/ValidationUtils.util";
 
 @Injectable({

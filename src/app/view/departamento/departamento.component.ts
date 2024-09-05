@@ -6,8 +6,8 @@ import { DynamicTableComponent } from 'src/app/core/components/dynamic-table/dyn
 import { TablePrimeColumOptions } from 'src/app/core/components/dynamic-table/TablePrimeColumOptions';
 import { NotificacaoService } from 'src/app/core/service/notificacao.service';
 import { ValidationUtils } from 'src/app/core/utils/ValidationUtils.util';
-import { ConfirmacaoDialogDTO } from 'src/app/shared/models/ConfirmacaoDialogDTO.model';
-import { Departamento } from 'src/app/shared/models/Departamento.model';
+import { Departamento } from 'src/app/shared/models/cadastro/Departamento.model';
+import { ConfirmacaoDialogDTO } from 'src/app/shared/models/dto/ConfirmacaoDialogDTO.model';
 import { DepartamentoService } from 'src/app/shared/services/departamento.service';
 import { ExcelService } from 'src/app/shared/services/excel.service';
 
@@ -42,7 +42,7 @@ export class DepartamentoComponent implements OnInit {
     constructor(
         private datePipe: DatePipe,
         private confirmationService: ConfirmationService,
-        private notificaoService: NotificacaoService,
+        private notificadoService: NotificacaoService,
         private excelService: ExcelService,
         private departamentoService: DepartamentoService
     ) { }
@@ -60,12 +60,12 @@ export class DepartamentoComponent implements OnInit {
             tap((response) => {
                 this.listaDepartamentos = [...response];
 				if (!ValidationUtils.isNotUndefinedAndNotNull(this.listaDepartamentos) || this.listaDepartamentos.length == 0) {
-					this.notificaoService.informacao('Nenhum departamento encontrado!', undefined, false, 10);
+					this.notificadoService.informacao('Nenhum departamento encontrado!', undefined, false, 10);
 				}
                 this.listaDepartamentos = [...this.listaDepartamentos];
             }),
             catchError((error) => {
-                this.notificaoService.erro(error.error, undefined, false, 10);
+                this.notificadoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();
@@ -101,7 +101,7 @@ export class DepartamentoComponent implements OnInit {
 
     salvar(): void {
         if (!ValidationUtils.stringNotEmpty(this.filtroNomeDepartamento)) {
-            this.notificaoService.aviso('Nome do departamento não encontrado! Informe o nome!', undefined, false, 10);
+            this.notificadoService.aviso('Nome do departamento não encontrado! Informe o nome!', undefined, false, 10);
             return;
         }
 
@@ -126,10 +126,10 @@ export class DepartamentoComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificaoService.sucesso('Departamento: ' + departamentoSalvo.nome + ' cadastrado com sucesso!', undefined, false, 10);
+                this.notificadoService.sucesso('Departamento: ' + departamentoSalvo.nome + ' cadastrado com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
-                this.notificaoService.erro(error.error, undefined, false, 10);
+                this.notificadoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();
@@ -144,16 +144,16 @@ export class DepartamentoComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificaoService.sucesso('Departamento: ' + departamentoSalvo.nome + ' atualizado com sucesso!', undefined, false, 10);
+                this.notificadoService.sucesso('Departamento: ' + departamentoSalvo.nome + ' atualizado com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
-                this.notificaoService.erro(error.error, undefined, false, 10);
+                this.notificadoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();
     }
 
-    exportar(): void {
+    exportarExcel(): void {
         const listaDadosDepartamentos: any[] = this.atribuirDadosExportacao(this.colunasTabelaDepartamento, this.listaDepartamentos)
         this.excelService.exportarArquivoExcel(listaDadosDepartamentos, 'relatorio_departamentos');
     }
@@ -193,16 +193,16 @@ export class DepartamentoComponent implements OnInit {
 
     inativar(departamento: Departamento): void {
         if (!departamento.indicadorAtivo) {
-            this.notificaoService.aviso('Não é possível inativar pois esse departamento já está inativo!', undefined, false, 10);
+            this.notificadoService.aviso('Não é possível inativar pois esse departamento já está inativo!', undefined, false, 10);
             return;
         }
         this.departamentoService.inativar(departamento.codigo, true).pipe(
             tap(() => {
                 this.pesquisar();
-                this.notificaoService.sucesso('Departamento: ' + departamento.nome + ' inativado com sucesso!', undefined, false, 10);
+                this.notificadoService.sucesso('Departamento: ' + departamento.nome + ' inativado com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
-                this.notificaoService.erro(error.error, undefined, false, 10);
+                this.notificadoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();

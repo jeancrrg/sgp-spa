@@ -7,9 +7,14 @@ export const AppRotas: Routes = [
         path: '', component: AppLayoutComponent,
         children: [
             { path: '', loadChildren: () => import('./demo/components/dashboard/dashboard.module').then(module => module.DashboardModule) },
+            { path: 'produto/resumo', loadChildren: () => import('./view/produto/resumo-produto/resumo-produto.module')
+                .then(module => module.ResumoProdutoModule) },
+            { path: 'produto/detalhe', loadChildren: () => import('./view/produto/detalhe-produto/detalhe-produto.module')
+                .then(module => module.DetalheProdutoModule) },
             { path: 'marca', loadChildren: () => import('./view/marca/marca.module').then(module => module.MarcaModule) },
             { path: 'departamento', loadChildren: () => import('./view/departamento/departamento.module').then(module => module.DepartamentoModule) },
             { path: 'categoria', loadChildren: () => import('./view/categoria/categoria.module').then(module => module.CategoriaModule) },
+
 
 
             { path: 'uikit', loadChildren: () => import('./demo/components/uikit/uikit.module').then(m => m.UIkitModule) },

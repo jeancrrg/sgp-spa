@@ -4,7 +4,7 @@ import { ValidationUtils } from "src/app/core/utils/ValidationUtils.util";
 import { RequisicaoHttpService } from "src/app/core/service/requisicaoHttp.service";
 import { ConfiguracaoAuxiliarService } from "src/app/core/service/configuracao.auxiliar.service";
 import { Observable } from "rxjs";
-import { Departamento } from "../models/Departamento.model";
+import { Departamento } from "../models/cadastro/Departamento.model";
 
 @Injectable({
     providedIn: 'root',

@@ -1,0 +1,89 @@
+<p-breadcrumb [model]="itemsBreadCrumb"></p-breadcrumb>
+
+<div class="ui-g ui-fluid">
+    <div class="ui-g-12 pb-0">
+        <div class="card ui-g-12">
+            <div class="ui-g-12">
+                <app-toolbar-buttons>
+                    <div class="ui-toolbar-group-left btn-min-width">
+                        <button pButton pRipple label="Pesquisar" icon="pi pi-search" class="mr-2" (click)="pesquisar()"></button>
+                        <button pButton pRipple label="Limpar" icon="pi pi-trash" class="mr-2" (click)="limparFiltros()"></button>
+                        <button pButton pRipple label="Cadastrar" icon="pi pi-save" (click)="abrirDetalhesProduto()"></button>
+                    </div>
+                    <div class="ui-toolbar-group-right btn-min-width">
+                        <button pButton pRipple label="Exportar" icon="pi pi-file-excel" (click)="exportarExcel()"></button>
+                    </div>
+                </app-toolbar-buttons>
+
+                <p-panel>
+                    <p-header>
+                        <i class="pi pi-fw pi-filter" style="vertical-align: middle;"></i>
+                        <span> Filtro Consulta </span>
+                    </p-header>
+                    <div class="grid formgrid">
+                        <div class="col-12 lg:col-2 lg:mb-0">
+                            <div class="floating-label">
+                                <input type="text" id="filtroCodigoMarca" pInputText placeholder=" " [(ngModel)]="filtroCodigoProduto"
+                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10">
+                                <label for="filtroCodigoMarca"> Código </label>
+                            </div>
+                        </div>
+
+                        <div class="col-12 lg:col-3 lg:mb-0">
+                            <div class="floating-label">
+                                <input type="text" id="filtroNomeMarca" pInputText placeholder=" " [(ngModel)]="filtroNomeProduto" uppercase maxlength="50"/>
+                                <label for="filtroNomeMarca"> Nome </label>
+                            </div>
+                        </div>
+
+                        <div class="col-12 lg:col-2 lg:mb-0">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    filter="true"
+                                    inputId="filtroTipoProduto"
+                                    [autoDisplayFirst]="false"
+                                    [options]="listaTiposProdutos"
+                                    [showClear]="true"
+                                    [style]="{'width':'100%'}"
+                                    [(ngModel)]="filtroTipoProduto">
+
+                                    <ng-template pTemplate="empty"> Nenhum tipo de produto encontrado! </ng-template>
+                                </p-dropdown>
+                                <label for="filtroTipoProduto"> Tipo Produto </label>
+                            </span>
+                        </div>
+
+                        <div class="col-12 lg:col-2 lg:mb-0">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    filter="true"
+                                    inputId="filtroStatusProduto"
+                                    [autoDisplayFirst]="false"
+                                    [options]="listaStatusProdutos"
+                                    [showClear]="true"
+                                    [style]="{'width':'100%'}"
+                                    [(ngModel)]="filtroStatusProduto">
+
+                                    <ng-template pTemplate="empty"> Nenhum status de produto encontrado! </ng-template>
+                                </p-dropdown>
+                                <label for="filtroStatusProduto"> Status </label>
+                            </span>
+                        </div>
+
+                        <div class="col-12 mt-2 lg:col-1 lg:mb-0">
+                            <p-checkbox label="Sem estoque?" [(ngModel)]="filtroIndicadorSemEstoque" [binary]="true"></p-checkbox>
+                        </div>
+                    </div>
+                </p-panel>
+
+                <app-dynamic-table
+                    #tabelaProduto
+                    [value]="listaProdutos"
+                    [columns]="colunasTabelaProduto"
+                    [rows]="6">
+                </app-dynamic-table>
+            </div>
+        </div>
+    </div>
+</div>
+

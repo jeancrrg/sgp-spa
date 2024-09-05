@@ -1,7 +1,7 @@
 import { HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { ValidationUtils } from "src/app/core/utils/ValidationUtils.util";
-import { Marca } from "../models/Marca.model";
+import { Marca } from "../models/cadastro/Marca.model";
 import { RequisicaoHttpService } from "src/app/core/service/requisicaoHttp.service";
 import { ConfiguracaoAuxiliarService } from "src/app/core/service/configuracao.auxiliar.service";
 import { Observable } from "rxjs";
