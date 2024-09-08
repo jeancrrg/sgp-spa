@@ -42,7 +42,7 @@ export class DepartamentoComponent implements OnInit {
     constructor(
         private datePipe: DatePipe,
         private confirmationService: ConfirmationService,
-        private notificadoService: NotificacaoService,
+        private notificacaoService: NotificacaoService,
         private excelService: ExcelService,
         private departamentoService: DepartamentoService
     ) { }
@@ -60,12 +60,12 @@ export class DepartamentoComponent implements OnInit {
             tap((response) => {
                 this.listaDepartamentos = [...response];
 				if (!ValidationUtils.isNotUndefinedAndNotNull(this.listaDepartamentos) || this.listaDepartamentos.length == 0) {
-					this.notificadoService.informacao('Nenhum departamento encontrado!', undefined, false, 10);
+					this.notificacaoService.informacao('Nenhum departamento encontrado!', undefined, false, 10);
 				}
                 this.listaDepartamentos = [...this.listaDepartamentos];
             }),
             catchError((error) => {
-                this.notificadoService.erro(error.error, undefined, false, 10);
+                this.notificacaoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();
@@ -101,7 +101,7 @@ export class DepartamentoComponent implements OnInit {
 
     salvar(): void {
         if (!ValidationUtils.stringNotEmpty(this.filtroNomeDepartamento)) {
-            this.notificadoService.aviso('Nome do departamento não encontrado! Informe o nome!', undefined, false, 10);
+            this.notificacaoService.aviso('Nome do departamento não encontrado! Informe o nome!', undefined, false, 10);
             return;
         }
 
@@ -126,10 +126,10 @@ export class DepartamentoComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificadoService.sucesso('Departamento: ' + departamentoSalvo.nome + ' cadastrado com sucesso!', undefined, false, 10);
+                this.notificacaoService.sucesso('Departamento: ' + departamentoSalvo.nome + ' cadastrado com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
-                this.notificadoService.erro(error.error, undefined, false, 10);
+                this.notificacaoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();
@@ -144,10 +144,10 @@ export class DepartamentoComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificadoService.sucesso('Departamento: ' + departamentoSalvo.nome + ' atualizado com sucesso!', undefined, false, 10);
+                this.notificacaoService.sucesso('Departamento: ' + departamentoSalvo.nome + ' atualizado com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
-                this.notificadoService.erro(error.error, undefined, false, 10);
+                this.notificacaoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();
@@ -193,16 +193,16 @@ export class DepartamentoComponent implements OnInit {
 
     inativar(departamento: Departamento): void {
         if (!departamento.indicadorAtivo) {
-            this.notificadoService.aviso('Não é possível inativar pois esse departamento já está inativo!', undefined, false, 10);
+            this.notificacaoService.aviso('Não é possível inativar pois esse departamento já está inativo!', undefined, false, 10);
             return;
         }
         this.departamentoService.inativar(departamento.codigo, true).pipe(
             tap(() => {
                 this.pesquisar();
-                this.notificadoService.sucesso('Departamento: ' + departamento.nome + ' inativado com sucesso!', undefined, false, 10);
+                this.notificacaoService.sucesso('Departamento: ' + departamento.nome + ' inativado com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
-                this.notificadoService.erro(error.error, undefined, false, 10);
+                this.notificacaoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();

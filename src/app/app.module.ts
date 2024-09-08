@@ -1,5 +1,5 @@
-import { APP_INITIALIZER, NgModule } from '@angular/core';
-import { CommonModule, DatePipe, LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
+import { CommonModule, DatePipe, LocationStrategy, PathLocationStrategy, registerLocaleData } from '@angular/common';
 import { AppComponent } from './app.component';
 import { AppLayoutModule } from './layout/app.layout.module';
 import { NotfoundComponent } from './demo/components/notfound/notfound.component';
@@ -25,10 +25,13 @@ import { environment } from 'src/environments/environment';
 import { ConfiguracaoService } from './core/service/configuracao.service';
 import { ConfiguracaoAuxiliarService } from './core/service/configuracao.auxiliar.service';
 import { ToastModule } from 'primeng/toast';
+import localePt from '@angular/common/locales/pt';
 
 export function configServiceCreator(configuracaoService: ConfiguracaoService) {
     return () => configuracaoService.load(environment.config_file);
 }
+
+registerLocaleData(localePt);
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
@@ -46,6 +49,7 @@ export function configServiceCreator(configuracaoService: ConfiguracaoService) {
     providers: [
         { provide: APP_INITIALIZER, useFactory: configServiceCreator, deps: [ ConfiguracaoService ], multi: true },
         { provide: LocationStrategy, useClass: PathLocationStrategy },
+        { provide: LOCALE_ID, useValue: 'pt-BR' },
         DatePipe,
         CountryService,
         CustomerService,

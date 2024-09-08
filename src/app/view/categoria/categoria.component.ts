@@ -1,3 +1,4 @@
+import { TabelaDinamicaService } from './../../core/service/tabela-dinamica.service';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItem, SelectItem } from 'primeng/api';
@@ -46,12 +47,12 @@ export class CategoriaComponent implements OnInit {
     ];
 
     constructor(
-        private datePipe: DatePipe,
         private confirmationService: ConfirmationService,
-        private notificadoService: NotificacaoService,
+        private notificacaoService: NotificacaoService,
         private excelService: ExcelService,
         private departamentoService: DepartamentoService,
-        private categoriaService: CategoriaService
+        private categoriaService: CategoriaService,
+        private tabelaDinamicaService: TabelaDinamicaService
     ) { }
 
     ngOnInit(): void {
@@ -77,7 +78,7 @@ export class CategoriaComponent implements OnInit {
                 }
             }),
             catchError((error) => {
-                this.notificadoService.erro(error.error, undefined, false, 10);
+                this.notificacaoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();
@@ -93,12 +94,12 @@ export class CategoriaComponent implements OnInit {
             tap((response) => {
                 this.listaCategorias = [...response];
 				if (!ValidationUtils.isNotUndefinedAndNotNull(this.listaCategorias) || this.listaCategorias.length == 0) {
-					this.notificadoService.informacao('Nenhuma categoria encontrada!', undefined, false, 10);
+					this.notificacaoService.informacao('Nenhuma categoria encontrada!', undefined, false, 10);
 				}
                 this.listaCategorias = [...this.listaCategorias];
             }),
             catchError((error) => {
-                this.notificadoService.erro(error.error, undefined, false, 10);
+                this.notificacaoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();
@@ -136,11 +137,11 @@ export class CategoriaComponent implements OnInit {
 
     salvar(): void {
         if (!ValidationUtils.stringNotEmpty(this.filtroNomeCategoria)) {
-            this.notificadoService.aviso('Nome da categoria não encontrado! Informe o nome!', undefined, false, 10);
+            this.notificacaoService.aviso('Nome da categoria não encontrado! Informe o nome!', undefined, false, 10);
             return;
         }
         if (!ValidationUtils.isNotUndefinedAndNotNull(this.filtroDepartamento)) {
-            this.notificadoService.aviso('Departamento não encontrado! Informe o departamento!', undefined, false, 10);
+            this.notificacaoService.aviso('Departamento não encontrado! Informe o departamento!', undefined, false, 10);
             return;
         }
 
@@ -166,10 +167,10 @@ export class CategoriaComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificadoService.sucesso('Categoria: ' + categoriaSalvo.nome + ' cadastrada com sucesso!', undefined, false, 10);
+                this.notificacaoService.sucesso('Categoria: ' + categoriaSalvo.nome + ' cadastrada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
-                this.notificadoService.erro(error.error, undefined, false, 10);
+                this.notificacaoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();
@@ -184,50 +185,18 @@ export class CategoriaComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificadoService.sucesso('Categoria: ' + categoriaSalvo.nome + ' atualizada com sucesso!', undefined, false, 10);
+                this.notificacaoService.sucesso('Categoria: ' + categoriaSalvo.nome + ' atualizada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
-                this.notificadoService.erro(error.error, undefined, false, 10);
+                this.notificacaoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();
     }
 
     exportarExcel(): void {
-        const listaDadoscategorias: any[] = this.atribuirDadosExportacao(this.colunasTabelaCategoria, this.listaCategorias)
+        const listaDadoscategorias: any[] = this.tabelaDinamicaService.montarListaDadosExportacao(this.colunasTabelaCategoria, this.listaCategorias)
         this.excelService.exportarArquivoExcel(listaDadoscategorias, 'relatorio_categorias');
-    }
-
-    atribuirDadosExportacao(colunas: TablePrimeColumOptions[], dados: any[]): any[] {
-		return dados.map(dado => {
-			const linha = {};
-
-			colunas.forEach(coluna => {
-				let valor = this.getValorCampoAninhado(dado, coluna.field);
-
-				if (valor !== undefined) {
-					if (coluna.boolField) {
-						valor = valor ? 'SIM' : 'NÃO';
-					}
-                    if (coluna.dateField) {
-                        valor = this.datePipe.transform(valor, 'dd/MM/yyyy HH:mm');
-                    }
-				} else {
-					valor = '';
-				}
-				linha[coluna.header] = valor;
-			});
-
-			return linha;
-		});
-	}
-
-    getValorCampoAninhado(obj: any, caminho: string): any {
-        if (ValidationUtils.isNotUndefinedAndNotNull(caminho)) {
-            return caminho.split('.').reduce((acumulador, parte) => acumulador && acumulador[parte], obj);
-        } else {
-            return undefined;
-        }
     }
 
     abrirDialogConfirmacaoInativacao(categoria: Categoria): void {
@@ -242,16 +211,16 @@ export class CategoriaComponent implements OnInit {
 
     inativar(categoria: Categoria): void {
         if (!categoria.indicadorAtivo) {
-            this.notificadoService.aviso('Não é possível inativar pois essa categoria já está inativa!', undefined, false, 10);
+            this.notificacaoService.aviso('Não é possível inativar pois essa categoria já está inativa!', undefined, false, 10);
             return;
         }
         this.categoriaService.inativar(categoria.codigo, true).pipe(
             tap(() => {
                 this.pesquisar();
-                this.notificadoService.sucesso('Categoria: ' + categoria.nome + ' inativada com sucesso!', undefined, false, 10);
+                this.notificacaoService.sucesso('Categoria: ' + categoria.nome + ' inativada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
-                this.notificadoService.erro(error.error, undefined, false, 10);
+                this.notificacaoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();

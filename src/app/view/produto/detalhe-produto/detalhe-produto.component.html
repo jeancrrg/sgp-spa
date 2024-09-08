@@ -3,13 +3,10 @@
 <div class="card">
     <app-toolbar-buttons>
         <div class="ui-toolbar-group-left btn-min-width">
-            <button pButton pRipple label="Voltar" icon="pi pi-arrow-circle-left" class="mr-2" (click)="voltarResumoProduto()"></button>
+            <button pButton pRipple label="Voltar" icon="pi pi-arrow-left" class="mr-2" (click)="voltarResumoProduto()"></button>
             <button pButton pRipple label="Limpar" icon="pi pi-trash" class="mr-2" (click)="limparFiltros()"></button>
             <button pButton pRipple label="Salvar" icon="pi pi-save" (click)="salvar()"></button>
-        </div>
-
-        <div class="ui-toolbar-group-rigth btn-min-width">
-            <button pButton pRipple label="Upload Imagem" icon="pi pi-upload" (click)="salvar()"></button>
+            <button pButton pRipple label="Imagem" icon="pi pi-upload" (click)="salvar()"></button>
         </div>
     </app-toolbar-buttons>
 
@@ -19,7 +16,7 @@
             <div class="grid p-fluid">
                 <div class="col-12 lg:col-2 lg:mb-0">
                     <div class="floating-label">
-                        <input type="text" id="codigoProduto" pInputText placeholder=" " [(ngModel)]="codigo" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                        <input type="text" id="codigoProduto" pInputText placeholder=" " [(ngModel)]="produto.codigo" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                             maxlength="10" [disabled]="true">
                         <label for="codigoProduto"> Código </label>
                     </div>
@@ -27,14 +24,14 @@
 
                 <div class="col-12 lg:col-4 lg:mb-0">
                     <div class="floating-label">
-                        <input type="text" id="nomeProduto" pInputText placeholder=" " [(ngModel)]="nome" uppercase maxlength="100"/>
+                        <input type="text" id="nomeProduto" pInputText placeholder=" " [(ngModel)]="produto.nome" uppercase maxlength="100"/>
                         <label for="nomeProduto"> Nome </label>
                     </div>
                 </div>
 
                 <div class="col-12 lg:col-2 lg:mb-0">
                     <div class="floating-label">
-                        <input type="text" id="codigoProduto" pInputText placeholder=" " [(ngModel)]="codigoBarraEAN" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                        <input type="text" id="codigoProduto" pInputText placeholder=" " [(ngModel)]="produto.codigoBarrasEAN" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                             maxlength="13">
                         <label for="codigoBarraEAN"> EAN </label>
                     </div>
@@ -46,10 +43,10 @@
                             filter="true"
                             inputId="statusProduto"
                             [autoDisplayFirst]="false"
-                            [options]="listaStatus"
+                            [options]="listaStatusProduto"
                             [showClear]="true"
                             [style]="{'width':'100%'}"
-                            [(ngModel)]="status">
+                            [(ngModel)]="produto.statusProduto">
 
                             <ng-template pTemplate="empty"> Nenhum status de produto encontrado! </ng-template>
                         </p-dropdown>
@@ -66,7 +63,7 @@
                             [options]="listaTiposProduto"
                             [showClear]="true"
                             [style]="{'width':'100%'}"
-                            [(ngModel)]="tipoProduto">
+                            [(ngModel)]="produto.tipoProduto">
 
                             <ng-template pTemplate="empty"> Nenhum tipo de produto encontrado! </ng-template>
                         </p-dropdown>
@@ -76,14 +73,14 @@
 
                 <div class="col-12 lg:col-2 lg:mb-0">
                     <div class="floating-label">
-                        <input type="text" id="precoProduto" pInputText placeholder=" " [(ngModel)]="preco" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="8">
+                        <input type="text" id="precoProduto" pInputText placeholder=" " [(ngModel)]="produto.preco" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="8">
                         <label for="precoProduto"> Preço </label>
                     </div>
                 </div>
 
                 <div class="col-12 lg:col-2 lg:mb-0">
                     <div class="floating-label">
-                        <input type="text" id="estoqueProduto" pInputText placeholder=" " [(ngModel)]="estoque" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="8">
+                        <input type="text" id="estoqueProduto" pInputText placeholder=" " [(ngModel)]="produto.quantidadeEstoque" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="8">
                         <label for="estoqueProduto"> Estoque </label>
                     </div>
                 </div>
@@ -97,7 +94,7 @@
                             [options]="listaMarcas"
                             [showClear]="true"
                             [style]="{'width':'100%'}"
-                            [(ngModel)]="marca">
+                            [(ngModel)]="produto.marca">
 
                             <ng-template pTemplate="empty"> Nenhuma marca encontrada! </ng-template>
                         </p-dropdown>
@@ -114,7 +111,7 @@
                             [options]="listaDepartamentos"
                             [showClear]="true"
                             [style]="{'width':'100%'}"
-                            [(ngModel)]="departamento">
+                            [(ngModel)]="produto.departamento">
 
                             <ng-template pTemplate="empty"> Nenhum departamento encontrado! </ng-template>
                         </p-dropdown>
@@ -131,7 +128,7 @@
                             [options]="listaCategorias"
                             [showClear]="true"
                             [style]="{'width':'100%'}"
-                            [(ngModel)]="categoria">
+                            [(ngModel)]="produto.categoria">
 
                             <ng-template pTemplate="empty"> Nenhuma categoria encontrada! </ng-template>
                         </p-dropdown>
@@ -169,21 +166,23 @@
                         </p-panel>
                     </div>
 
+                    <!--
                     <div class="col-12 lg:col-7 lg:mb-0">
                         <app-dynamic-table
                             #tabelaDetalheImagem
                             [caption]="'Detalhe Imagem'"
-                            [value]="codigo"
-                            [columns]="codigo"
+                            [value]="produto"
+                            [columns]="produto"
                             [rows]="6">
                         </app-dynamic-table>
                     </div>
+                    -->
                 </div>
 
             </p-tabPanel>
 
             <p-tabPanel header="Descrição Detalhada" leftIcon="pi pi-book">
-                <textarea pInputTextarea rows="5" cols="30" placeholder="Mais informações do produto..." class="uppercase" maxlength="2660" [(ngModel)]="descricaoDetalhadaProduto"></textarea>
+                <textarea pInputTextarea rows="5" cols="30" placeholder="Mais informações do produto..." class="uppercase" maxlength="2660" [(ngModel)]="produto.descricaoDetalhada"></textarea>
             </p-tabPanel>
         </p-tabView>
     </div>

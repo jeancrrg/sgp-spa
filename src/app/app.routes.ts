@@ -7,7 +7,7 @@ export const AppRotas: Routes = [
         path: '', component: AppLayoutComponent,
         children: [
             { path: '', loadChildren: () => import('./demo/components/dashboard/dashboard.module').then(module => module.DashboardModule) },
-            { path: 'produto/resumo', loadChildren: () => import('./view/produto/resumo-produto/resumo-produto.module')
+            { path: 'produto', loadChildren: () => import('./view/produto/resumo-produto/resumo-produto.module')
                 .then(module => module.ResumoProdutoModule) },
             { path: 'produto/detalhe', loadChildren: () => import('./view/produto/detalhe-produto/detalhe-produto.module')
                 .then(module => module.DetalheProdutoModule) },

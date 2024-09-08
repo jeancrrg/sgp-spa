@@ -42,7 +42,7 @@ export class MarcaComponent implements OnInit {
     constructor(
         private datePipe: DatePipe,
         private confirmationService: ConfirmationService,
-        private notificadoService: NotificacaoService,
+        private notificacaoService: NotificacaoService,
         private excelService: ExcelService,
         private marcaService: MarcaService
     ) { }
@@ -60,12 +60,12 @@ export class MarcaComponent implements OnInit {
             tap((response) => {
                 this.listaMarcas = [...response];
 				if (!ValidationUtils.isNotUndefinedAndNotNull(this.listaMarcas) || this.listaMarcas.length == 0) {
-					this.notificadoService.informacao('Nenhuma marca encontrada!', undefined, false, 10);
+					this.notificacaoService.informacao('Nenhuma marca encontrada!', undefined, false, 10);
 				}
                 this.listaMarcas = [...this.listaMarcas];
             }),
             catchError((error) => {
-                this.notificadoService.erro(error.error, undefined, false, 10);
+                this.notificacaoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();
@@ -101,7 +101,7 @@ export class MarcaComponent implements OnInit {
 
     salvar(): void {
         if (!ValidationUtils.stringNotEmpty(this.filtroNomeMarca)) {
-            this.notificadoService.aviso('Nome da marca não encontrado! Informe o nome!', undefined, false, 10);
+            this.notificacaoService.aviso('Nome da marca não encontrado! Informe o nome!', undefined, false, 10);
             return;
         }
 
@@ -126,10 +126,10 @@ export class MarcaComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificadoService.sucesso('Marca: ' + marcaSalva.nome + ' cadastrada com sucesso!', undefined, false, 10);
+                this.notificacaoService.sucesso('Marca: ' + marcaSalva.nome + ' cadastrada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
-                this.notificadoService.erro(error.error, undefined, false, 10);
+                this.notificacaoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();
@@ -144,10 +144,10 @@ export class MarcaComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificadoService.sucesso('Marca: ' + marcaSalva.nome + ' atualizada com sucesso!', undefined, false, 10);
+                this.notificacaoService.sucesso('Marca: ' + marcaSalva.nome + ' atualizada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
-                this.notificadoService.erro(error.error, undefined, false, 10);
+                this.notificacaoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();
@@ -193,16 +193,16 @@ export class MarcaComponent implements OnInit {
 
     inativar(marca: Marca): void {
         if (!marca.indicadorAtivo) {
-            this.notificadoService.aviso('Não é possível inativar pois essa marca já está inativa!', undefined, false, 10);
+            this.notificacaoService.aviso('Não é possível inativar pois essa marca já está inativa!', undefined, false, 10);
             return;
         }
         this.marcaService.inativar(marca.codigo, true).pipe(
             tap(() => {
                 this.pesquisar();
-                this.notificadoService.sucesso('Marca: ' + marca.nome + ' inativada com sucesso!', undefined, false, 10);
+                this.notificacaoService.sucesso('Marca: ' + marca.nome + ' inativada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
-                this.notificadoService.erro(error.error, undefined, false, 10);
+                this.notificacaoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();
