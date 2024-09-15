@@ -22,7 +22,7 @@ export class StatusProdutoService {
             params = params.append('codigo', codigo + '');
         }
         if (ValidationUtils.stringNotEmpty(descricao)) {
-            params = params.append('descricao', descricao + '');
+            params = params.append('descricao', descricao);
         }
         return this.requisicaoHttpService.Get<StatusProduto[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'status-produto', {params: params}, loader, false, false);
     }

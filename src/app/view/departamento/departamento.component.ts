@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { TabelaDinamicaService } from './../../core/service/tabela-dinamica.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { catchError, of, tap } from 'rxjs';
@@ -32,6 +32,7 @@ export class DepartamentoComponent implements OnInit {
         { header: 'Código', field: 'codigo', width: '10%', align: 'center' },
         { header: 'Nome', field: 'nome', align: 'center' },
         { header: 'Ativo', field: 'indicadorAtivo', width: '10%', align: 'center', boolField: true},
+        { header: 'Data Cadastro', field: 'dataCadastro', dateField: true, datePipe: 'dd/MM/yyyy HH:mm', width: '15%', align: 'center' },
         { header: 'Última Alteração', field: 'dataUltimaAlteracao', dateField: true, datePipe: 'dd/MM/yyyy HH:mm', width: '15%', align: 'center' },
         { header: '', width: '5%', align: 'center', buttonField: true, iconButton: "pi pi-pencil", command: (Departamento) =>
             this.habilitarEdicao(Departamento), tooltip: "Editar" },
@@ -40,9 +41,9 @@ export class DepartamentoComponent implements OnInit {
     ];
 
     constructor(
-        private datePipe: DatePipe,
         private confirmationService: ConfirmationService,
         private notificacaoService: NotificacaoService,
+        private tabelaDinamicaService: TabelaDinamicaService,
         private excelService: ExcelService,
         private departamentoService: DepartamentoService
     ) { }
@@ -118,7 +119,7 @@ export class DepartamentoComponent implements OnInit {
     }
 
     cadastrarDepartamento(departamento: Departamento): void {
-        this.departamentoService.salvar(departamento, true).pipe(
+        this.departamentoService.cadastrar(departamento, true).pipe(
             tap((response) => {
                 let departamentoSalvo = response;
                 this.listaDepartamentos.push(departamentoSalvo);
@@ -126,7 +127,7 @@ export class DepartamentoComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificacaoService.sucesso('Departamento: ' + departamentoSalvo.nome + ' cadastrado com sucesso!', undefined, false, 10);
+                this.notificacaoService.sucesso('Departamento cadastrado com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
                 this.notificacaoService.erro(error.error, undefined, false, 10);
@@ -144,7 +145,7 @@ export class DepartamentoComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificacaoService.sucesso('Departamento: ' + departamentoSalvo.nome + ' atualizado com sucesso!', undefined, false, 10);
+                this.notificacaoService.sucesso('Departamento atualizado com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
                 this.notificacaoService.erro(error.error, undefined, false, 10);
@@ -154,32 +155,9 @@ export class DepartamentoComponent implements OnInit {
     }
 
     exportarExcel(): void {
-        const listaDadosDepartamentos: any[] = this.atribuirDadosExportacao(this.colunasTabelaDepartamento, this.listaDepartamentos)
+        const listaDadosDepartamentos: any[] = this.tabelaDinamicaService.montarListaDadosExportacao(this.colunasTabelaDepartamento, this.listaDepartamentos)
         this.excelService.exportarArquivoExcel(listaDadosDepartamentos, 'relatorio_departamentos');
     }
-
-    atribuirDadosExportacao(colunas: TablePrimeColumOptions[], dados: any[]): any[] {
-		return dados.map(dado => {
-			const linha = {};
-
-			colunas.forEach(coluna => {
-				let valor = dado[coluna.field];
-				if (valor !== undefined) {
-					if (coluna.boolField) {
-						valor = valor ? 'SIM' : 'NÃO';
-					}
-                    if (coluna.dateField) {
-                        valor = this.datePipe.transform(valor, 'dd/MM/yyyy HH:mm');
-                    }
-				} else {
-					valor = '';
-				}
-				linha[coluna.header] = valor;
-			});
-
-			return linha;
-		});
-	}
 
     abrirDialogConfirmacaoInativacao(departamento: Departamento): void {
         let dtoConfirmacao = new ConfirmacaoDialogDTO();
@@ -199,7 +177,7 @@ export class DepartamentoComponent implements OnInit {
         this.departamentoService.inativar(departamento.codigo, true).pipe(
             tap(() => {
                 this.pesquisar();
-                this.notificacaoService.sucesso('Departamento: ' + departamento.nome + ' inativado com sucesso!', undefined, false, 10);
+                this.notificacaoService.sucesso('Departamento inativado com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
                 this.notificacaoService.erro(error.error, undefined, false, 10);

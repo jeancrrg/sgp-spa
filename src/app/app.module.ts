@@ -1,3 +1,4 @@
+import { IConfig, NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
 import { CommonModule, DatePipe, LocationStrategy, PathLocationStrategy, registerLocaleData } from '@angular/common';
 import { AppComponent } from './app.component';
@@ -44,12 +45,15 @@ registerLocaleData(localePt);
         CoreComponentsModule,
         ConfirmDialogModule,
         LoadingModule,
-        ToastModule
+        ToastModule,
+        NgxMaskDirective,
+        NgxMaskPipe
     ],
     providers: [
         { provide: APP_INITIALIZER, useFactory: configServiceCreator, deps: [ ConfiguracaoService ], multi: true },
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         { provide: LOCALE_ID, useValue: 'pt-BR' },
+        provideNgxMask(),
         DatePipe,
         CountryService,
         CustomerService,

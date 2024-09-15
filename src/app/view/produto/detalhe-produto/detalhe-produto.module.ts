@@ -15,6 +15,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DetalheProdutoRotas } from "./detalhe-produto.routes";
 import { GalleriaModule } from "primeng/galleria";
+import { NgxMaskDirective, NgxMaskPipe } from "ngx-mask";
 
 @NgModule({
     declarations: [DetalheProdutoComponent],
@@ -32,7 +33,9 @@ import { GalleriaModule } from "primeng/galleria";
         DialogModule,
         ConfirmDialogModule,
         GalleriaModule,
-        RouterModule.forChild(DetalheProdutoRotas)
+        RouterModule.forChild(DetalheProdutoRotas),
+        NgxMaskDirective,
+        NgxMaskPipe
     ]
 })
 export class DetalheProdutoModule {}

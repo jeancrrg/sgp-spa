@@ -36,16 +36,17 @@ export class ResumoProdutoComponent implements OnInit {
 
     colunasTabelaProduto: TablePrimeColumOptions[] = [
         { header: 'Código', field: 'codigo', width: '10%', align: 'center' },
-        { header: 'Nome', field: 'nome', width: '25%', align: 'center' },
+        { header: 'Nome', field: 'nome', width: '30%', align: 'center' },
         { header: 'Preço', field: 'preco', width: '10%', align: 'center', currencyField: true},
         { header: 'Tipo', field: 'tipoProduto.descricao', width: '10%', align: 'center'},
-        { header: 'Estoque', field: 'quantidadeEstoque', width: '10%', align: 'center'},
+        { header: 'Estoque', field: 'quantidadeEstoque', width: '5%', align: 'center'},
         { header: 'Status', field: 'statusProduto.descricao', width: '10%', align: 'center'},
-        { header: 'Última Alteração', field: 'dataUltimaAlteracao', dateField: true, datePipe: 'dd/MM/yyyy HH:mm', width: '15%', align: 'center' },
+        { header: 'Data Cadastro', field: 'dataCadastro', dateField: true, datePipe: 'dd/MM/yyyy HH:mm', width: '10%', align: 'center' },
+        { header: 'Última Alteração', field: 'dataUltimaAlteracao', dateField: true, datePipe: 'dd/MM/yyyy HH:mm', width: '10%', align: 'center' },
         { header: '', width: '5%', align: 'center', buttonField: true, iconButton: "pi pi-pencil", command: (Produto) =>
             this.enviarDetalhesProduto(Produto), tooltip: "Editar" },
-        { header: '', width: '5%', align: 'center', buttonField: true, iconButton: "pi pi-times", command: (categoria) =>
-            this.inativarProduto(), tooltip: "Inativar" }
+        { header: '', width: '5%', align: 'center', buttonField: true, iconButton: "pi pi-times", command: (Produto) =>
+            this.inativarProduto(Produto), tooltip: "Inativar" }
     ];
 
     constructor(
@@ -157,7 +158,7 @@ export class ResumoProdutoComponent implements OnInit {
         this.excelService.exportarArquivoExcel(listaProdutosExportar, 'relatorio_produtos')
     }
 
-    inativarProduto(): void {
+    inativarProduto(produto: Produto): void {
 
     }
 

@@ -22,7 +22,7 @@ export class ProdutoService {
             params = params.append('codigo', codigo + '');
         }
         if (ValidationUtils.stringNotEmpty(nome)) {
-            params = params.append('nome', nome + '');
+            params = params.append('nome', nome);
         }
         if (ValidationUtils.isNotUndefinedAndNotNull(codigoTipoProduto)) {
             params = params.append('codigoTipoProduto', codigoTipoProduto + '');
@@ -34,6 +34,18 @@ export class ProdutoService {
             params = params.append('indicadorSemEstoque', indicadorSemEstoque + '');
         }
         return this.requisicaoHttpService.Get<Produto[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'produtos', {params: params}, loader, false, false);
+    }
+
+    cadastrar(produto: Produto, loader: boolean): Observable<Produto> {
+        return this.requisicaoHttpService.Post<Produto>(this.configuracaoAuxiliarService.getContextoSistema() + 'produtos', produto, {}, loader, false, false);
+    }
+
+    atualizar(produto: Produto, loader: boolean): Observable<Produto> {
+        return this.requisicaoHttpService.Put<Produto>(this.configuracaoAuxiliarService.getContextoSistema() + 'produtos', produto, {}, loader, false, false);
+    }
+
+    inativar(codigo: number, loader: boolean): Observable<void> {
+        return this.requisicaoHttpService.Delete<void>(this.configuracaoAuxiliarService.getContextoSistema() + 'produtos/' + codigo, {}, loader, false, false);
     }
 
 }

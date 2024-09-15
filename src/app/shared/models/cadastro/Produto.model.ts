@@ -13,6 +13,7 @@ export class Produto {
     marca: Marca;
     departamento: Departamento;
     categoria: Categoria;
+    dataCadastro: Date;
     dataUltimaAlteracao: Date;
     preco: number;
     quantidadeEstoque: number;

@@ -22,7 +22,7 @@ export class DepartamentoService {
             params = params.append('codigo', codigo + '');
         }
         if (ValidationUtils.stringNotEmpty(nome)) {
-            params = params.append('nome', nome + '');
+            params = params.append('nome', nome);
         }
         if (ValidationUtils.isNotUndefinedAndNotNull(indicadorAtivo)) {
             params = params.append('indicadorAtivo', indicadorAtivo + '');
@@ -30,7 +30,7 @@ export class DepartamentoService {
         return this.requisicaoHttpService.Get<Departamento[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'departamentos', {params: params}, loader, false, false);
     }
 
-    salvar(departamento: Departamento, loader: boolean): Observable<Departamento> {
+    cadastrar(departamento: Departamento, loader: boolean): Observable<Departamento> {
         return this.requisicaoHttpService.Post<Departamento>(this.configuracaoAuxiliarService.getContextoSistema() + 'departamentos', departamento, {}, loader, false, false);
     }
 

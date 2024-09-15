@@ -2204,7 +2204,7 @@
         transition-duration: 0.15s;
     }
     .p-button .p-button-icon-left {
-        /*margin: 0 0.5rem 0 0;*/
+        margin: 0 0.5rem 0 0;
     }
     .p-button .p-button-icon-right {
         margin-left: 0.5rem;
@@ -5048,7 +5048,7 @@
     }
 
     .p-fileupload .p-fileupload-buttonbar {
-        background: #efefef;
+        background: #4b4b4b;
         padding: 1rem 1.25rem;
         border: 1px solid #dee2e6;
         color: #212529;

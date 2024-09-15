@@ -22,7 +22,7 @@ export class TipoProdutoService {
             params = params.append('codigo', codigo + '');
         }
         if (ValidationUtils.stringNotEmpty(descricao)) {
-            params = params.append('descricao', descricao + '');
+            params = params.append('descricao', descricao);
         }
         return this.requisicaoHttpService.Get<TipoProduto[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'tipos-produto', {params: params}, loader, false, false);
     }

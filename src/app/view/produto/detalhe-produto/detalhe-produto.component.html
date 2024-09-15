@@ -3,10 +3,14 @@
 <div class="card">
     <app-toolbar-buttons>
         <div class="ui-toolbar-group-left btn-min-width">
-            <button pButton pRipple label="Voltar" icon="pi pi-arrow-left" class="mr-2" (click)="voltarResumoProduto()"></button>
-            <button pButton pRipple label="Limpar" icon="pi pi-trash" class="mr-2" (click)="limparFiltros()"></button>
-            <button pButton pRipple label="Salvar" icon="pi pi-save" (click)="salvar()"></button>
-            <button pButton pRipple label="Imagem" icon="pi pi-upload" (click)="salvar()"></button>
+            <button pButton pRipple label="Voltar" icon="pi pi-arrow-left" class="mr-2"
+                (click)="voltarResumoProduto()"></button>
+            <button pButton pRipple label="Limpar" icon="pi pi-trash" class="mr-2" (click)="limparFiltros()"
+                [disabled]="desabilitarCampos"></button>
+            <button pButton pRipple label="Salvar" icon="pi pi-save" (click)="salvar()"
+                [disabled]="desabilitarCampos"></button>
+            <button pButton pRipple label="Upload Imagem" icon="pi pi-upload" (click)="abrirDialogUploadImagem()"
+                [disabled]="desabilitarCampos"></button>
         </div>
     </app-toolbar-buttons>
 
@@ -16,37 +20,36 @@
             <div class="grid p-fluid">
                 <div class="col-12 lg:col-2 lg:mb-0">
                     <div class="floating-label">
-                        <input type="text" id="codigoProduto" pInputText placeholder=" " [(ngModel)]="produto.codigo" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-                            maxlength="10" [disabled]="true">
+                        <input type="text" id="codigoProduto" pInputText placeholder=" " [(ngModel)]="produto.codigo"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10"
+                            [disabled]="true">
                         <label for="codigoProduto"> Código </label>
                     </div>
                 </div>
 
                 <div class="col-12 lg:col-4 lg:mb-0">
                     <div class="floating-label">
-                        <input type="text" id="nomeProduto" pInputText placeholder=" " [(ngModel)]="produto.nome" uppercase maxlength="100"/>
+                        <input type="text" id="nomeProduto" pInputText placeholder=" " [(ngModel)]="produto.nome"
+                            uppercase maxlength="100" [disabled]="desabilitarCampos" />
                         <label for="nomeProduto"> Nome </label>
                     </div>
                 </div>
 
                 <div class="col-12 lg:col-2 lg:mb-0">
                     <div class="floating-label">
-                        <input type="text" id="codigoProduto" pInputText placeholder=" " [(ngModel)]="produto.codigoBarrasEAN" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-                            maxlength="13">
+                        <input type="text" id="codigoProduto" pInputText placeholder=" "
+                            [(ngModel)]="produto.codigoBarrasEAN"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="13"
+                            [disabled]="desabilitarCampos">
                         <label for="codigoBarraEAN"> EAN </label>
                     </div>
                 </div>
 
                 <div class="col-12 lg:col-2 lg:mb-0">
                     <span class="p-float-label">
-                        <p-dropdown
-                            filter="true"
-                            inputId="statusProduto"
-                            [autoDisplayFirst]="false"
-                            [options]="listaStatusProduto"
-                            [showClear]="true"
-                            [style]="{'width':'100%'}"
-                            [(ngModel)]="produto.statusProduto">
+                        <p-dropdown filter="true" inputId="statusProduto" [autoDisplayFirst]="false"
+                            [options]="listaStatusProduto" [showClear]="true" [style]="{'width':'100%'}"
+                            [disabled]="desabilitarCampos" [(ngModel)]="produto.statusProduto">
 
                             <ng-template pTemplate="empty"> Nenhum status de produto encontrado! </ng-template>
                         </p-dropdown>
@@ -56,14 +59,9 @@
 
                 <div class="col-12 lg:col-2 lg:mb-0">
                     <span class="p-float-label">
-                        <p-dropdown
-                            filter="true"
-                            inputId="tipoProduto"
-                            [autoDisplayFirst]="false"
-                            [options]="listaTiposProduto"
-                            [showClear]="true"
-                            [style]="{'width':'100%'}"
-                            [(ngModel)]="produto.tipoProduto">
+                        <p-dropdown filter="true" inputId="tipoProduto" [autoDisplayFirst]="false"
+                            [options]="listaTiposProduto" [showClear]="true" [style]="{'width':'100%'}"
+                            [disabled]="desabilitarCampos" [(ngModel)]="produto.tipoProduto">
 
                             <ng-template pTemplate="empty"> Nenhum tipo de produto encontrado! </ng-template>
                         </p-dropdown>
@@ -73,28 +71,28 @@
 
                 <div class="col-12 lg:col-2 lg:mb-0">
                     <div class="floating-label">
-                        <input type="text" id="precoProduto" pInputText placeholder=" " [(ngModel)]="produto.preco" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="8">
+                        <input id="precoProduto" type="text" pInputText placeholder=" " mask="separator.2"
+                            thousandSeparator="." decimalMarker="," prefix="R$ " maxlength="18"
+                            [disabled]="desabilitarCampos" [(ngModel)]="produto.preco">
                         <label for="precoProduto"> Preço </label>
                     </div>
                 </div>
 
                 <div class="col-12 lg:col-2 lg:mb-0">
                     <div class="floating-label">
-                        <input type="text" id="estoqueProduto" pInputText placeholder=" " [(ngModel)]="produto.quantidadeEstoque" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="8">
+                        <input type="text" id="estoqueProduto" pInputText placeholder=" "
+                            [(ngModel)]="produto.quantidadeEstoque"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="8"
+                            [disabled]="desabilitarCampos">
                         <label for="estoqueProduto"> Estoque </label>
                     </div>
                 </div>
 
                 <div class="col-12 lg:col-2 lg:mb-0">
                     <span class="p-float-label">
-                        <p-dropdown
-                            filter="true"
-                            inputId="marcaProduto"
-                            [autoDisplayFirst]="false"
-                            [options]="listaMarcas"
-                            [showClear]="true"
-                            [style]="{'width':'100%'}"
-                            [(ngModel)]="produto.marca">
+                        <p-dropdown filter="true" inputId="marcaProduto" [autoDisplayFirst]="false"
+                            [options]="listaMarcas" [showClear]="true" [style]="{'width':'100%'}"
+                            [disabled]="desabilitarCampos" [(ngModel)]="produto.marca">
 
                             <ng-template pTemplate="empty"> Nenhuma marca encontrada! </ng-template>
                         </p-dropdown>
@@ -104,14 +102,9 @@
 
                 <div class="col-12 lg:col-3 lg:mb-0">
                     <span class="p-float-label">
-                        <p-dropdown
-                            filter="true"
-                            inputId="departamentoProduto"
-                            [autoDisplayFirst]="false"
-                            [options]="listaDepartamentos"
-                            [showClear]="true"
-                            [style]="{'width':'100%'}"
-                            [(ngModel)]="produto.departamento">
+                        <p-dropdown filter="true" inputId="departamentoProduto" [autoDisplayFirst]="false"
+                            [options]="listaDepartamentos" [showClear]="true" [style]="{'width':'100%'}"
+                            [disabled]="desabilitarCampos" [(ngModel)]="produto.departamento">
 
                             <ng-template pTemplate="empty"> Nenhum departamento encontrado! </ng-template>
                         </p-dropdown>
@@ -121,14 +114,9 @@
 
                 <div class="col-12 lg:col-3 lg:mb-0">
                     <span class="p-float-label">
-                        <p-dropdown
-                            filter="true"
-                            inputId="categoriaProduto"
-                            [autoDisplayFirst]="false"
-                            [options]="listaCategorias"
-                            [showClear]="true"
-                            [style]="{'width':'100%'}"
-                            [(ngModel)]="produto.categoria">
+                        <p-dropdown filter="true" inputId="categoriaProduto" [autoDisplayFirst]="false"
+                            [options]="listaCategorias" [showClear]="true" [style]="{'width':'100%'}"
+                            [disabled]="desabilitarCampos" [(ngModel)]="produto.categoria">
 
                             <ng-template pTemplate="empty"> Nenhuma categoria encontrada! </ng-template>
                         </p-dropdown>
@@ -146,45 +134,85 @@
             <p-tabPanel header="Imagem" leftIcon="pi pi-image">
 
                 <div class="grid p-fluid">
-                    <div class="col-12 lg:col-5 lg:mb-0">
+                    <div class="col-12 lg:col-6 lg:mb-0">
                         <p-panel>
                             <p-header>
                                 <span> Imagens </span>
                                 <i class="pi pi-images" style="vertical-align: middle;"></i>
                             </p-header>
+
                             <div class="ui-g">
-                                <!--
-                                <p-lightbox [images]="imagens" styleClass="imagem-lightbox"></p-lightbox>
-                                -->
-                                <!--
-                                <p-galleria [value]="imagens" [responsiveOptions]="responsiveOptions"
-                                    [showThumbnails]="true" [showIndicators]="true"
-                                    [thumbnailsPosition]="'bottom'" [preview]="true">
+                               <p-galleria [value]="images" [responsiveOptions]="galleriaResponsiveOptions"
+                                    [containerStyle]="{'max-width': '800px', 'margin':'auto'}" [numVisible]="6"
+                                    [circular]="true">
+                                    <ng-template pTemplate="item" let-item>
+                                        <img [src]="item.itemImageSrc" style="width: 100%; display: block;" />
+                                    </ng-template>
+                                    <ng-template pTemplate="thumbnail" let-item>
+                                        <div class="grid nogutter justify-center">
+                                            <img [src]="item.thumbnailImageSrc" style="display: block;" />
+                                        </div>
+                                    </ng-template>
                                 </p-galleria>
-                                -->
+
                             </div>
                         </p-panel>
                     </div>
 
-                    <!--
-                    <div class="col-12 lg:col-7 lg:mb-0">
-                        <app-dynamic-table
-                            #tabelaDetalheImagem
-                            [caption]="'Detalhe Imagem'"
-                            [value]="produto"
-                            [columns]="produto"
-                            [rows]="6">
-                        </app-dynamic-table>
+                    <div class="col-12 lg:col-6 lg:mb-0">
+                        <p-panel>
+                            <p-header>
+                                <span> Informações Imagens </span>
+                                <i class="pi pi-list" style="vertical-align: middle;"></i>
+                            </p-header>
+
+                            <div class="ui-g">
+                                <app-dynamic-table #tabelaInformacaoImagem
+                                    [value]="listaImagensProduto"
+                                    [columns]="colunasTabelaInformacaoImagens"
+                                    [rows]="6">
+                                </app-dynamic-table>
+                            </div>
+                        </p-panel>
                     </div>
-                    -->
                 </div>
 
             </p-tabPanel>
 
             <p-tabPanel header="Descrição Detalhada" leftIcon="pi pi-book">
-                <textarea pInputTextarea rows="5" cols="30" placeholder="Mais informações do produto..." class="uppercase" maxlength="2660" [(ngModel)]="produto.descricaoDetalhada"></textarea>
+                <textarea pInputTextarea rows="5" cols="30" placeholder="Mais informações do produto..."
+                    class="uppercase" maxlength="2660" [disabled]="desabilitarCampos"
+                    [(ngModel)]="produto.descricaoDetalhada"></textarea>
             </p-tabPanel>
         </p-tabView>
     </div>
 </div>
 
+<!-- DIALOG UPLOAD IMAGEM -->
+<p-dialog [(visible)]='mostrarDialogUploadImagem' modal="true" [responsive]="true" [style]="{'maxWidth':'80%'}">
+    <p-header style="font-size: 20px;"> Upload de imagem </p-header>
+
+    <ng-template [ngIf]="!isEditando">
+        <div class="card">
+            <span> O upload da imagem só pode ser realizado após o cadastro do produto! <br>
+                    Cadastre o produto e logo após realize a edição fazendo o upload da imagem.
+            </span>
+        </div>
+    </ng-template>
+
+    <ng-template [ngIf]="isEditando">
+        <div class="card">
+            <p-fileUpload
+                #fileUpload
+                chooseLabel="Adicionar Imagem"
+                uploadLabel="Importar Imagem"
+                cancelLabel="Cancelar"
+                customUpload="true"
+                maxFileSize="2000000"
+                multiple="true"
+                accept=".png, .jpeg, .jpg"
+                (uploadHandler)="uploadImagem($event, fileUpload)">
+            </p-fileUpload>
+        </div>
+    </ng-template>
+</p-dialog>

@@ -23,7 +23,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'CADASTRO',
                 items: [
-                    { label: 'Produto', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['/produto'], routerLinkActiveOptions: { exact: false } },
+                    { label: 'Produto', icon: 'pi pi-fw pi-shopping-bag', routerLink: ['/produto'], routerLinkActiveOptions: { exact: false } },
                     { label: 'Marca', icon: 'pi pi-fw pi-tag', routerLink: ['/marca'] },
                     { label: 'Departamento', icon: 'pi pi-fw pi-envelope', routerLink: ['/departamento'] },
                     { label: 'Categoria', icon: 'pi pi-fw pi-bookmark', routerLink: ['/categoria'] }

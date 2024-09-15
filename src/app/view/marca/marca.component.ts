@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { MarcaService } from './../../shared/services/marca.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItem } from 'primeng/api';
@@ -10,6 +9,7 @@ import { ValidationUtils } from 'src/app/core/utils/ValidationUtils.util';
 import { Marca } from 'src/app/shared/models/cadastro/Marca.model';
 import { ExcelService } from 'src/app/shared/services/excel.service';
 import { ConfirmacaoDialogDTO } from 'src/app/shared/models/dto/ConfirmacaoDialogDTO.model';
+import { TabelaDinamicaService } from 'src/app/core/service/tabela-dinamica.service';
 
 @Component({
     selector: 'app-marca',
@@ -32,6 +32,7 @@ export class MarcaComponent implements OnInit {
         { header: 'Código', field: 'codigo', width: '10%', align: 'center' },
         { header: 'Nome', field: 'nome', align: 'center' },
         { header: 'Ativo', field: 'indicadorAtivo', width: '10%', align: 'center', boolField: true},
+        { header: 'Data Cadastro', field: 'dataCadastro', dateField: true, datePipe: 'dd/MM/yyyy HH:mm', width: '15%', align: 'center' },
         { header: 'Última Alteração', field: 'dataUltimaAlteracao', dateField: true, datePipe: 'dd/MM/yyyy HH:mm', width: '15%', align: 'center' },
         { header: '', width: '5%', align: 'center', buttonField: true, iconButton: "pi pi-pencil", command: (Marca) =>
             this.habilitarEdicao(Marca), tooltip: "Editar" },
@@ -40,9 +41,9 @@ export class MarcaComponent implements OnInit {
     ];
 
     constructor(
-        private datePipe: DatePipe,
         private confirmationService: ConfirmationService,
         private notificacaoService: NotificacaoService,
+        private tabelaDinamicaService: TabelaDinamicaService,
         private excelService: ExcelService,
         private marcaService: MarcaService
     ) { }
@@ -118,7 +119,7 @@ export class MarcaComponent implements OnInit {
     }
 
     cadastrarMarca(marca: Marca): void {
-        this.marcaService.salvar(marca, true).pipe(
+        this.marcaService.cadastrar(marca, true).pipe(
             tap((response) => {
                 let marcaSalva = response;
                 this.listaMarcas.push(marcaSalva);
@@ -126,7 +127,7 @@ export class MarcaComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificacaoService.sucesso('Marca: ' + marcaSalva.nome + ' cadastrada com sucesso!', undefined, false, 10);
+                this.notificacaoService.sucesso('Marca cadastrada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
                 this.notificacaoService.erro(error.error, undefined, false, 10);
@@ -144,7 +145,7 @@ export class MarcaComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificacaoService.sucesso('Marca: ' + marcaSalva.nome + ' atualizada com sucesso!', undefined, false, 10);
+                this.notificacaoService.sucesso('Marca atualizada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
                 this.notificacaoService.erro(error.error, undefined, false, 10);
@@ -154,32 +155,9 @@ export class MarcaComponent implements OnInit {
     }
 
     exportarExcel(): void {
-        const listaDadosMarcas: any[] = this.atribuirDadosExportacao(this.colunasTabelaMarca, this.listaMarcas)
+        const listaDadosMarcas: any[] = this.tabelaDinamicaService.montarListaDadosExportacao(this.colunasTabelaMarca, this.listaMarcas)
         this.excelService.exportarArquivoExcel(listaDadosMarcas, 'relatorio_marcas');
     }
-
-    atribuirDadosExportacao(colunas: TablePrimeColumOptions[], dados: any[]): any[] {
-		return dados.map(dado => {
-			const linha = {};
-
-			colunas.forEach(coluna => {
-				let valor = dado[coluna.field];
-				if (valor !== undefined) {
-					if (coluna.boolField) {
-						valor = valor ? 'SIM' : 'NÃO';
-					}
-                    if (coluna.dateField) {
-                        valor = this.datePipe.transform(valor, 'dd/MM/yyyy HH:mm');
-                    }
-				} else {
-					valor = '';
-				}
-				linha[coluna.header] = valor;
-			});
-
-			return linha;
-		});
-	}
 
     abrirDialogConfirmacaoInativacao(marca: Marca): void {
         let dtoConfirmacao = new ConfirmacaoDialogDTO();
@@ -199,7 +177,7 @@ export class MarcaComponent implements OnInit {
         this.marcaService.inativar(marca.codigo, true).pipe(
             tap(() => {
                 this.pesquisar();
-                this.notificacaoService.sucesso('Marca: ' + marca.nome + ' inativada com sucesso!', undefined, false, 10);
+                this.notificacaoService.sucesso('Marca inativada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
                 this.notificacaoService.erro(error.error, undefined, false, 10);

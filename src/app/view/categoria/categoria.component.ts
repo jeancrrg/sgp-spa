@@ -1,5 +1,4 @@
 import { TabelaDinamicaService } from './../../core/service/tabela-dinamica.service';
-import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService, MenuItem, SelectItem } from 'primeng/api';
 import { catchError, of, tap } from 'rxjs';
@@ -35,10 +34,11 @@ export class CategoriaComponent implements OnInit {
 
     colunasTabelaCategoria: TablePrimeColumOptions[] = [
         { header: 'Código', field: 'codigo', width: '10%', align: 'center' },
-        { header: 'Nome', field: 'nome', width: '25%', align: 'center' },
+        { header: 'Nome', field: 'nome', width: '15%', align: 'center' },
         { header: 'Cód. Departamento', field: 'departamento.codigo', width: '10%', align: 'center'},
-        { header: 'Departamento', field: 'departamento.nome', width: '25%', align: 'center'},
+        { header: 'Departamento', field: 'departamento.nome', width: '15%', align: 'center'},
         { header: 'Ativo', field: 'indicadorAtivo', width: '10%', align: 'center', boolField: true},
+        { header: 'Data Cadastro', field: 'dataCadastro', dateField: true, datePipe: 'dd/MM/yyyy HH:mm', width: '15%', align: 'center' },
         { header: 'Última Alteração', field: 'dataUltimaAlteracao', dateField: true, datePipe: 'dd/MM/yyyy HH:mm', width: '15%', align: 'center' },
         { header: '', width: '5%', align: 'center', buttonField: true, iconButton: "pi pi-pencil", command: (categoria) =>
             this.habilitarEdicao(categoria), tooltip: "Editar" },
@@ -159,7 +159,7 @@ export class CategoriaComponent implements OnInit {
     }
 
     cadastrarcategoria(categoria: Categoria): void {
-        this.categoriaService.salvar(categoria, true).pipe(
+        this.categoriaService.cadastrar(categoria, true).pipe(
             tap((response) => {
                 let categoriaSalvo = response;
                 this.listaCategorias.push(categoriaSalvo);
@@ -167,7 +167,7 @@ export class CategoriaComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificacaoService.sucesso('Categoria: ' + categoriaSalvo.nome + ' cadastrada com sucesso!', undefined, false, 10);
+                this.notificacaoService.sucesso('Categoria cadastrada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
                 this.notificacaoService.erro(error.error, undefined, false, 10);
@@ -185,7 +185,7 @@ export class CategoriaComponent implements OnInit {
                 this.estaCadastrando = false;
                 this.estaEditando = false;
                 this.pesquisar();
-                this.notificacaoService.sucesso('Categoria: ' + categoriaSalvo.nome + ' atualizada com sucesso!', undefined, false, 10);
+                this.notificacaoService.sucesso('Categoria atualizada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
                 this.notificacaoService.erro(error.error, undefined, false, 10);
@@ -217,7 +217,7 @@ export class CategoriaComponent implements OnInit {
         this.categoriaService.inativar(categoria.codigo, true).pipe(
             tap(() => {
                 this.pesquisar();
-                this.notificacaoService.sucesso('Categoria: ' + categoria.nome + ' inativada com sucesso!', undefined, false, 10);
+                this.notificacaoService.sucesso('Categoria inativada com sucesso!', undefined, false, 10);
             }),
             catchError((error) => {
                 this.notificacaoService.erro(error.error, undefined, false, 10);

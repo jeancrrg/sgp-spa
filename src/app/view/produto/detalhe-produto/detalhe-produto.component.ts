@@ -1,3 +1,4 @@
+import { ImagemProdutoService } from './../../../shared/services/imagem-produto.service';
 import { MarcaService } from './../../../shared/services/marca.service';
 import { TipoProdutoService } from './../../../shared/services/tipoProduto.service';
 import { NotificacaoService } from './../../../core/service/notificacao.service';
@@ -10,6 +11,12 @@ import { Produto } from 'src/app/shared/models/cadastro/Produto.model';
 import { DepartamentoService } from 'src/app/shared/services/departamento.service';
 import { StatusProdutoService } from 'src/app/shared/services/statusProduto.service';
 import { CategoriaService } from 'src/app/shared/services/categoria.service';
+import { ProdutoService } from 'src/app/shared/services/produto.service';
+import { PhotoService } from 'src/app/demo/service/photo.service';
+import { TablePrimeColumOptions } from 'src/app/core/components/dynamic-table/TablePrimeColumOptions';
+import { FileUpload } from 'primeng/fileupload';
+import { ImagemProduto } from 'src/app/shared/models/cadastro/ImagemProduto.model';
+import { ConverterUtils } from 'src/app/core/utils/ConverterUtils.util';
 
 @Component({
     selector: 'app-detalhe-produto',
@@ -20,7 +27,8 @@ export class DetalheProdutoComponent implements OnInit {
 
     itemsBreadCrumb: MenuItem[] = [];
     readonly KEY_PRODUTO = "produto";
-    isEditando: boolean;
+    isEditando: boolean = false;
+    desabilitarCampos: boolean = false;
 
     produto: Produto = new Produto();
     listaStatusProduto: SelectItem[] = [];
@@ -29,6 +37,40 @@ export class DetalheProdutoComponent implements OnInit {
     listaDepartamentos: SelectItem[] = [];
     listaCategorias: SelectItem[] = [];
 
+    images!: any[];
+    listaImagensProduto: ImagemProduto[] = [];
+    colunasTabelaInformacaoImagens: TablePrimeColumOptions[] = [
+        { header: 'Código', field: 'codigo', width: '15%', align: 'center' },
+        { header: 'Nome', field: 'nome', width: '25%', align: 'center' },
+        { header: 'Nome Imagem Servidor', field: 'nomeImagemServidor', width: '25%', align: 'center' },
+        { header: 'Tamanho', field: 'tamanhoImagemConvertido', width: '15%', align: 'center'},
+        { header: '', width: '10%', align: 'center', buttonField: true, iconButton: "pi pi-pencil", command: (Imagem) =>
+            this.baixarImagem(Imagem), tooltip: "Baixar" },
+        { header: '', width: '10%', align: 'center', buttonField: true, iconButton: "pi pi-times", command: (Imagem) =>
+            this.excluirImagem(Imagem), tooltip: "Excluir" }
+    ];
+
+    mostrarDialogUploadImagem: boolean = false;
+
+    galleriaResponsiveOptions: any[] = [
+        {
+            breakpoint: '1024px',
+            numVisible: 5
+        },
+        {
+            breakpoint: '960px',
+            numVisible: 4
+        },
+        {
+            breakpoint: '768px',
+            numVisible: 3
+        },
+        {
+            breakpoint: '560px',
+            numVisible: 1
+        }
+    ];
+
     constructor(
         private router: Router,
         private notificacaoService: NotificacaoService,
@@ -36,7 +78,10 @@ export class DetalheProdutoComponent implements OnInit {
         private tipoProdutoService: TipoProdutoService,
         private marcaService: MarcaService,
         private departamentoService: DepartamentoService,
-        private categoriaService: CategoriaService
+        private categoriaService: CategoriaService,
+        private produtoService: ProdutoService,
+        private imagemProdutoService: ImagemProdutoService,
+        private photoService: PhotoService
     ) { }
 
     async ngOnInit(): Promise<void> {
@@ -45,15 +90,19 @@ export class DetalheProdutoComponent implements OnInit {
         this.itemsBreadCrumb.push({ label: 'Produto' });
         this.itemsBreadCrumb.push({ label: 'Detalhe' });
 
-        this.isEditando = false;
         await this.carregarCamposDropdown();
 
         const produtoRecuperado: Produto = this.recuperarProdutoNoLocalStorage();
         localStorage.removeItem(this.KEY_PRODUTO);
         if (ValidationUtils.isNotUndefinedAndNotNull(produtoRecuperado)) {
             this.produto = produtoRecuperado;
+            this.carregarInformacoesImagensProduto(this.produto.codigo);
             this.isEditando = true;
         }
+
+        this.photoService.getImages().then(images => {
+            this.images = images;
+        });
     }
 
     async carregarCamposDropdown(): Promise<void> {
@@ -211,6 +260,19 @@ export class DetalheProdutoComponent implements OnInit {
         return produto;
     }
 
+    carregarInformacoesImagensProduto(codigoProduto: number): void {
+        this.listaImagensProduto = [];
+        this.imagemProdutoService.buscar(undefined, undefined, codigoProduto, true).pipe(
+            tap((response) => {
+                this.listaImagensProduto = [...response];
+            }),
+            catchError((error) => {
+                this.notificacaoService.erro(error.error, undefined, false, 10);
+                return of();
+            })
+        ).subscribe();
+    }
+
     voltarResumoProduto(): void {
         this.router.navigateByUrl('produto');
     }
@@ -222,8 +284,11 @@ export class DetalheProdutoComponent implements OnInit {
     async salvar(): Promise<void> {
         const filtrosValido = await this.validarCamposObrigatorios();
         if (filtrosValido) {
-
-
+            if (this.isEditando) {
+                this.atualizarProduto();
+            } else {
+                this.cadastrarProduto();
+            }
         }
     }
 
@@ -233,53 +298,131 @@ export class DetalheProdutoComponent implements OnInit {
                 this.notificacaoService.aviso('Nenhum dado do produto encontrado! Informe os dados!', undefined, false, 10);
                 return resolve(false);
             }
-            if (!ValidationUtils.stringNotEmpty(this.produto.nome)) {
-                this.notificacaoService.aviso('Nome do produto não encontrado! Informe o nome!', undefined, false, 10);
-                return resolve(false);
+
+            const listaCamposObrigatorios: any[] = [
+                { valor: this.produto.nome, mensagem: 'Nome do produto não encontrado! Informe o nome!' },
+                { valor: this.produto.codigoBarrasEAN, mensagem: 'Código de barras EAN do produto não encontrado! Informe o código de barras EAN!' },
+                { valor: this.produto.statusProduto?.codigo, mensagem: 'Status do produto não encontrado! Informe o status!' },
+                { valor: this.produto.tipoProduto?.codigo, mensagem: 'Tipo do produto não encontrado! Informe o tipo!' },
+                { valor: this.produto.preco, mensagem: 'Preço do produto não encontrado! Informe o preço!' },
+                { valor: this.produto.quantidadeEstoque, mensagem: 'Quantidade de estoque do produto não encontrada! Informe a quantidade de estoque!' },
+                { valor: this.produto.marca?.codigo, mensagem: 'Marca do produto não encontrada! Informe a marca!' },
+                { valor: this.produto.departamento?.codigo, mensagem: 'Departamento do produto não encontrado! Informe o departamento!' },
+                { valor: this.produto.categoria?.codigo, mensagem: 'Categoria do produto não encontrada! Informe a categoria!' }
+            ];
+
+            for (const campo of listaCamposObrigatorios) {
+                if (!ValidationUtils.isNotUndefinedAndNotNull(campo.valor)) {
+                    this.notificacaoService.aviso(campo.mensagem, undefined, false, 10);
+                    return resolve(false);
+                }
             }
-            if (!ValidationUtils.stringNotEmpty(this.produto.codigoBarrasEAN)) {
-                this.notificacaoService.aviso('Código de barras EAN do produto não encontrado! Informe o código de barras EAN!', undefined, false, 10);
-                return resolve(false);
-            }
+
             if (this.produto.codigoBarrasEAN.length < 13) {
                 this.notificacaoService.aviso('Código de barras EAN inválido! Informe um código de barras EAN com 13 dígitos!', undefined, false, 10);
                 return resolve(false);
             }
-            if (!ValidationUtils.isNotUndefinedAndNotNull(this.produto.statusProduto) || !ValidationUtils.isNotUndefinedAndNotNull(this.produto.statusProduto.codigo)) {
-                this.notificacaoService.aviso('Status do produto não encontrado! Informe o status!', undefined, false, 10);
-                return resolve(false);
-            }
-            if (!ValidationUtils.isNotUndefinedAndNotNull(this.produto.tipoProduto) || !ValidationUtils.isNotUndefinedAndNotNull(this.produto.tipoProduto.codigo)) {
-                this.notificacaoService.aviso('Tipo do produto não encontrado! Informe o tipo!', undefined, false, 10);
-                return resolve(false);
-            }
-            if (!ValidationUtils.isNotUndefinedAndNotNull(this.produto.preco)) {
-                this.notificacaoService.aviso('Preço do produto não encontrado! Informe o preço!', undefined, false, 10);
-                return resolve(false);
-            }
-            if (this.produto.preco == 0) {
+            if (this.produto.preco <= 0) {
                 this.notificacaoService.aviso('Preço do produto inválido! Informe um preço maior que zero!', undefined, false, 10);
                 return resolve(false);
             }
-            if (!ValidationUtils.isNotUndefinedAndNotNull(this.produto.quantidadeEstoque)) {
-                this.notificacaoService.aviso('Quantidade de estoque do produto não encontrado! Informe a quantidade de estoque!', undefined, false, 10);
-                return resolve(false);
-            }
-            if (!ValidationUtils.isNotUndefinedAndNotNull(this.produto.marca) || !ValidationUtils.isNotUndefinedAndNotNull(this.produto.marca.codigo)) {
-                this.notificacaoService.aviso('Marca do produto não encontrada! Informe a marca!', undefined, false, 10);
-                return resolve(false);
-            }
-            if (!ValidationUtils.isNotUndefinedAndNotNull(this.produto.departamento) || !ValidationUtils.isNotUndefinedAndNotNull(this.produto.departamento.codigo)) {
-                this.notificacaoService.aviso('Departamento do produto não encontrado! Informe o departamento!', undefined, false, 10);
-                return resolve(false);
-            }
-            if (!ValidationUtils.isNotUndefinedAndNotNull(this.produto.categoria) || !ValidationUtils.isNotUndefinedAndNotNull(this.produto.categoria.codigo)) {
-                this.notificacaoService.aviso('Categoria do produto não encontrada! Informe a categoria!', undefined, false, 10);
-                return resolve(false);
-            }
 
-            return resolve(true);
+            resolve(true);
         });
+    }
+
+    atualizarProduto(): void {
+        if (!ValidationUtils.isNotUndefinedAndNotNull(this.produto.codigo)) {
+            this.notificacaoService.aviso('Código do produto não encontrado para atualizar!', undefined, false, 10);
+            return;
+        }
+
+        this.produtoService.atualizar(this.produto, true).pipe(
+            tap((response) => {
+                this.produto = response;
+                this.notificacaoService.sucesso('Produto atualizado com sucesso!', undefined, false, 10);
+            }),
+            catchError((error) => {
+                this.notificacaoService.erro(error.error, undefined, false, 10);
+                return of();
+            })
+        ).subscribe();
+    }
+
+    cadastrarProduto(): void {
+        this.produtoService.cadastrar(this.produto, true).pipe(
+            tap((response) => {
+                this.produto = response;
+                this.notificacaoService.sucesso('Produto cadastrado com sucesso!', undefined, false, 10);
+                this.desabilitarCampos = true;
+            }),
+            catchError((error) => {
+                this.notificacaoService.erro(error.error, undefined, false, 10);
+                return of();
+            })
+        ).subscribe();
+    }
+
+    abrirDialogUploadImagem(): void {
+        this.mostrarDialogUploadImagem = true;
+    }
+
+    async uploadImagem(listaArquivos: FileUpload, fileUpload: FileUpload): Promise<void> {
+        let produtoValido: boolean = await this.validarCamposObrigatorios();
+        if (produtoValido) {
+            let listaImagensProdutoUpload: ImagemProduto[] = await this.processarImagensProduto(listaArquivos);
+            this.cadastrarImagensProduto(this.produto.codigo, listaImagensProdutoUpload);
+        }
+        fileUpload.clear();
+    }
+
+    async processarImagensProduto(listaArquivos: FileUpload): Promise<ImagemProduto[]> {
+        let listaImagensProdutoUpload: ImagemProduto[] = [];
+        for (let arquivo of listaArquivos.files) {
+            let arquivoBase64: string = await ConverterUtils.converterArquivoEmBase64(arquivo);
+            const tipoExtensaoImagem = this.obterExtensaoArquivo(arquivo.name);
+            listaImagensProdutoUpload.push(this.montarObjetoImagemProduto(arquivo.name, arquivo.size, tipoExtensaoImagem, arquivoBase64));
+        };
+        return listaImagensProdutoUpload;
+    }
+
+    obterExtensaoArquivo(nomeArquivo: string): string {
+        const partes = nomeArquivo.split('.');
+        if (partes.length > 1) {
+            return `.${partes.pop()?.toLowerCase()}`;
+        } else {
+            throw new Error('O arquivo não possui uma extensão válida!');
+        }
+    }
+
+    montarObjetoImagemProduto(nomeImagem: string, tamanhoArquivo: number, tipoExtensaoImagem: string, arquivoBase64: string): ImagemProduto {
+        let imagemProduto: ImagemProduto = new ImagemProduto();
+        imagemProduto.nome = nomeImagem;
+        imagemProduto.tamanhoImagemBytes = tamanhoArquivo;
+        imagemProduto.tipoExtensaoImagem = tipoExtensaoImagem;
+        imagemProduto.arquivoBase64 = arquivoBase64;
+        return imagemProduto;
+    }
+
+    cadastrarImagensProduto(codigoProduto: number, listaImagensProdutoUpload: ImagemProduto[]): void {
+        this.imagemProdutoService.cadastrar(codigoProduto, listaImagensProdutoUpload, true).pipe(
+            tap((response) => {
+                this.mostrarDialogUploadImagem = false;
+                this.notificacaoService.sucesso('Upload das imagens realizado com sucesso!', undefined, false, 10);
+            }),
+            catchError((error) => {
+                this.notificacaoService.erro(error.error, undefined, false, 10);
+                return of();
+            })
+        ).subscribe();
+    }
+
+    baixarImagem(imagem): void {
+
+    }
+
+    excluirImagem(imagem): void {
+
     }
 
 }

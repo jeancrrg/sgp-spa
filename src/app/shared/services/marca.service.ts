@@ -22,7 +22,7 @@ export class MarcaService {
             params = params.append('codigo', codigo + '');
         }
         if (ValidationUtils.stringNotEmpty(nome)) {
-            params = params.append('nome', nome + '');
+            params = params.append('nome', nome);
         }
         if (ValidationUtils.isNotUndefinedAndNotNull(indicadorAtivo)) {
             params = params.append('indicadorAtivo', indicadorAtivo + '');
@@ -30,7 +30,7 @@ export class MarcaService {
         return this.requisicaoHttpService.Get<Marca[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'marcas', {params: params}, loader, false, false);
     }
 
-    salvar(marca: Marca, loader: boolean): Observable<Marca> {
+    cadastrar(marca: Marca, loader: boolean): Observable<Marca> {
         return this.requisicaoHttpService.Post<Marca>(this.configuracaoAuxiliarService.getContextoSistema() + 'marcas', marca, {}, loader, false, false);
     }
 

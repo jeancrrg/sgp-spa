@@ -22,7 +22,7 @@ export class CategoriaService {
             params = params.append('codigo', codigo + '');
         }
         if (ValidationUtils.stringNotEmpty(nome)) {
-            params = params.append('nome', nome + '');
+            params = params.append('nome', nome);
         }
         if (ValidationUtils.isNotUndefinedAndNotNull(indicadorAtivo)) {
             params = params.append('indicadorAtivo', indicadorAtivo + '');
@@ -33,7 +33,7 @@ export class CategoriaService {
         return this.requisicaoHttpService.Get<Categoria[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'categorias', {params: params}, loader, false, false);
     }
 
-    salvar(categoria: Categoria, loader: boolean): Observable<Categoria> {
+    cadastrar(categoria: Categoria, loader: boolean): Observable<Categoria> {
         return this.requisicaoHttpService.Post<Categoria>(this.configuracaoAuxiliarService.getContextoSistema() + 'categorias', categoria, {}, loader, false, false);
     }
 
