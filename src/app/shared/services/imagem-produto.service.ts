@@ -30,10 +30,8 @@ export class ImagemProdutoService {
         return this.requisicaoHttpService.Get<ImagemProduto[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'imagens-produto', {params: params}, loader, false, false);
     }
 
-    cadastrar(codigoProduto: number, listaImagensProduto: ImagemProduto[], loader: boolean): Observable<ImagemProduto[]> {
-        let params = new HttpParams();
-        params = params.append('codigoProduto', codigoProduto + '');
-        return this.requisicaoHttpService.Post<ImagemProduto[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'imagens-produto', listaImagensProduto, {params: params}, loader, false, false);
+    cadastrar(listaImagensProduto: ImagemProduto[], loader: boolean): Observable<ImagemProduto[]> {
+        return this.requisicaoHttpService.Post<ImagemProduto[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'imagens-produto', listaImagensProduto, {}, loader, false, false);
     }
 
 }

@@ -44,10 +44,10 @@ export class DetalheProdutoComponent implements OnInit {
         { header: 'Nome', field: 'nome', width: '25%', align: 'center' },
         { header: 'Nome Imagem Servidor', field: 'nomeImagemServidor', width: '25%', align: 'center' },
         { header: 'Tamanho', field: 'tamanhoImagemConvertido', width: '15%', align: 'center'},
-        { header: '', width: '10%', align: 'center', buttonField: true, iconButton: "pi pi-pencil", command: (Imagem) =>
-            this.baixarImagem(Imagem), tooltip: "Baixar" },
+        { header: '', width: '10%', align: 'center', buttonField: true, iconButton: "pi pi-download", command: (Imagem) =>
+            this.baixarImagem(Imagem), tooltip: "Baixar Imagem" },
         { header: '', width: '10%', align: 'center', buttonField: true, iconButton: "pi pi-times", command: (Imagem) =>
-            this.excluirImagem(Imagem), tooltip: "Excluir" }
+            this.excluirImagem(Imagem), tooltip: "Excluir Imagem" }
     ];
 
     mostrarDialogUploadImagem: boolean = false;
@@ -371,7 +371,7 @@ export class DetalheProdutoComponent implements OnInit {
         let produtoValido: boolean = await this.validarCamposObrigatorios();
         if (produtoValido) {
             let listaImagensProdutoUpload: ImagemProduto[] = await this.processarImagensProduto(listaArquivos);
-            this.cadastrarImagensProduto(this.produto.codigo, listaImagensProdutoUpload);
+            this.cadastrarImagensProduto(listaImagensProdutoUpload);
         }
         fileUpload.clear();
     }
@@ -399,13 +399,14 @@ export class DetalheProdutoComponent implements OnInit {
         let imagemProduto: ImagemProduto = new ImagemProduto();
         imagemProduto.nome = nomeImagem;
         imagemProduto.tamanhoImagemBytes = tamanhoArquivo;
+        imagemProduto.codigoProduto = this.produto.codigo;
         imagemProduto.tipoExtensaoImagem = tipoExtensaoImagem;
         imagemProduto.arquivoBase64 = arquivoBase64;
         return imagemProduto;
     }
 
-    cadastrarImagensProduto(codigoProduto: number, listaImagensProdutoUpload: ImagemProduto[]): void {
-        this.imagemProdutoService.cadastrar(codigoProduto, listaImagensProdutoUpload, true).pipe(
+    cadastrarImagensProduto(listaImagensProdutoUpload: ImagemProduto[]): void {
+        this.imagemProdutoService.cadastrar(listaImagensProdutoUpload, true).pipe(
             tap((response) => {
                 this.mostrarDialogUploadImagem = false;
                 this.notificacaoService.sucesso('Upload das imagens realizado com sucesso!', undefined, false, 10);
