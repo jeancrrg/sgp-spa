@@ -54,6 +54,22 @@ export class DetalheProdutoComponent implements OnInit {
 
     galleriaResponsiveOptions: any[] = [
         {
+          breakpoint: '1024px',
+          numVisible: 3
+        },
+        {
+          breakpoint: '768px',
+          numVisible: 2
+        },
+        {
+          breakpoint: '560px',
+          numVisible: 1
+        }
+    ];
+
+    /*
+    galleriaResponsiveOptions: any[] = [
+        {
             breakpoint: '1024px',
             numVisible: 5
         },
@@ -70,6 +86,7 @@ export class DetalheProdutoComponent implements OnInit {
             numVisible: 1
         }
     ];
+    */
 
     constructor(
         private router: Router,
@@ -100,9 +117,13 @@ export class DetalheProdutoComponent implements OnInit {
             this.isEditando = true;
         }
 
+        /*
         this.photoService.getImages().then(images => {
             this.images = images;
         });
+        */
+
+
     }
 
     async carregarCamposDropdown(): Promise<void> {
@@ -265,6 +286,12 @@ export class DetalheProdutoComponent implements OnInit {
         this.imagemProdutoService.buscar(undefined, undefined, codigoProduto, true).pipe(
             tap((response) => {
                 this.listaImagensProduto = [...response];
+
+                // Preparar a lista para a galeria
+                this.images = this.listaImagensProduto.map(imagem => ({
+                    itemImageSrc: imagem.urlImagem,
+                    thumbnailImageSrc: imagem.urlImagem
+                }));
             }),
             catchError((error) => {
                 this.notificacaoService.erro(error.error, undefined, false, 10);

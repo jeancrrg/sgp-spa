@@ -9,6 +9,7 @@ export class ImagemProduto {
     tipoExtensaoImagem: string;
     dataUltimaAlteracao: Date;
     arquivoBase64: string;
+    urlImagem: string;
     tamanhoImagemConvertido: string;
     statusCadastro: Status;
     mensagemErroCadastro: string;

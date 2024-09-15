@@ -141,21 +141,28 @@
                                 <i class="pi pi-images" style="vertical-align: middle;"></i>
                             </p-header>
 
-                            <div class="ui-g">
-                               <p-galleria [value]="images" [responsiveOptions]="galleriaResponsiveOptions"
-                                    [containerStyle]="{'max-width': '800px', 'margin':'auto'}" [numVisible]="6"
-                                    [circular]="true">
-                                    <ng-template pTemplate="item" let-item>
-                                        <img [src]="item.itemImageSrc" style="width: 100%; display: block;" />
-                                    </ng-template>
-                                    <ng-template pTemplate="thumbnail" let-item>
-                                        <div class="grid nogutter justify-center">
-                                            <img [src]="item.thumbnailImageSrc" style="display: block;" />
-                                        </div>
-                                    </ng-template>
-                                </p-galleria>
+                            <ng-template [ngIf]="listaImagensProduto.length <= 0">
+                                <div class="card">
+                                    <span> Nenhum imagem encontrada </span>
+                                </div>
+                            </ng-template>
 
-                            </div>
+                            <ng-template [ngIf]="listaImagensProduto.length > 0">
+                                <div class="ui-g">
+                                   <p-galleria [value]="images" [responsiveOptions]="galleriaResponsiveOptions"
+                                        [containerStyle]="{'max-width': '800px', 'margin':'auto'}" [numVisible]="6"
+                                        [circular]="true">
+                                        <ng-template pTemplate="item" let-item>
+                                            <img [src]="item.itemImageSrc" style="width: 100%; display: block;" />
+                                        </ng-template>
+                                        <ng-template pTemplate="thumbnail" let-item>
+                                            <div class="grid nogutter justify-center">
+                                                <img [src]="item.thumbnailImageSrc" style="display: block;" />
+                                            </div>
+                                        </ng-template>
+                                    </p-galleria>
+                                </div>
+                            </ng-template>
                         </p-panel>
                     </div>
 
