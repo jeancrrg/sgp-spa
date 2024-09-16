@@ -12,7 +12,6 @@ import { DepartamentoService } from 'src/app/shared/services/departamento.servic
 import { StatusProdutoService } from 'src/app/shared/services/statusProduto.service';
 import { CategoriaService } from 'src/app/shared/services/categoria.service';
 import { ProdutoService } from 'src/app/shared/services/produto.service';
-import { PhotoService } from 'src/app/demo/service/photo.service';
 import { TablePrimeColumOptions } from 'src/app/core/components/dynamic-table/TablePrimeColumOptions';
 import { FileUpload } from 'primeng/fileupload';
 import { ImagemProduto } from 'src/app/shared/models/cadastro/ImagemProduto.model';
@@ -37,8 +36,29 @@ export class DetalheProdutoComponent implements OnInit {
     listaDepartamentos: SelectItem[] = [];
     listaCategorias: SelectItem[] = [];
 
-    images!: any[];
+    imagens!: any[];
     listaImagensProduto: ImagemProduto[] = [];
+    mostrarDialogUploadImagem: boolean = false;
+
+    galleriaResponsiveOptions: any[] = [
+        {
+          breakpoint: '1024px',
+          numVisible: 5
+        },
+        {
+            breakpoint: '960px',
+            numVisible: 4
+        },
+        {
+          breakpoint: '768px',
+          numVisible: 3
+        },
+        {
+          breakpoint: '560px',
+          numVisible: 1
+        }
+    ];
+
     colunasTabelaInformacaoImagens: TablePrimeColumOptions[] = [
         { header: 'Código', field: 'codigo', width: '15%', align: 'center' },
         { header: 'Nome', field: 'nome', width: '25%', align: 'center' },
@@ -50,44 +70,6 @@ export class DetalheProdutoComponent implements OnInit {
             this.excluirImagem(Imagem), tooltip: "Excluir Imagem" }
     ];
 
-    mostrarDialogUploadImagem: boolean = false;
-
-    galleriaResponsiveOptions: any[] = [
-        {
-          breakpoint: '1024px',
-          numVisible: 3
-        },
-        {
-          breakpoint: '768px',
-          numVisible: 2
-        },
-        {
-          breakpoint: '560px',
-          numVisible: 1
-        }
-    ];
-
-    /*
-    galleriaResponsiveOptions: any[] = [
-        {
-            breakpoint: '1024px',
-            numVisible: 5
-        },
-        {
-            breakpoint: '960px',
-            numVisible: 4
-        },
-        {
-            breakpoint: '768px',
-            numVisible: 3
-        },
-        {
-            breakpoint: '560px',
-            numVisible: 1
-        }
-    ];
-    */
-
     constructor(
         private router: Router,
         private notificacaoService: NotificacaoService,
@@ -97,8 +79,7 @@ export class DetalheProdutoComponent implements OnInit {
         private departamentoService: DepartamentoService,
         private categoriaService: CategoriaService,
         private produtoService: ProdutoService,
-        private imagemProdutoService: ImagemProdutoService,
-        private photoService: PhotoService
+        private imagemProdutoService: ImagemProdutoService
     ) { }
 
     async ngOnInit(): Promise<void> {
@@ -116,14 +97,6 @@ export class DetalheProdutoComponent implements OnInit {
             this.carregarInformacoesImagensProduto(this.produto.codigo);
             this.isEditando = true;
         }
-
-        /*
-        this.photoService.getImages().then(images => {
-            this.images = images;
-        });
-        */
-
-
     }
 
     async carregarCamposDropdown(): Promise<void> {
@@ -286,18 +259,20 @@ export class DetalheProdutoComponent implements OnInit {
         this.imagemProdutoService.buscar(undefined, undefined, codigoProduto, true).pipe(
             tap((response) => {
                 this.listaImagensProduto = [...response];
-
-                // Preparar a lista para a galeria
-                this.images = this.listaImagensProduto.map(imagem => ({
-                    itemImageSrc: imagem.urlImagem,
-                    thumbnailImageSrc: imagem.urlImagem
-                }));
+                this.carregarImagensProduto();
             }),
             catchError((error) => {
                 this.notificacaoService.erro(error.error, undefined, false, 10);
                 return of();
             })
         ).subscribe();
+    }
+
+    carregarImagensProduto(): void {
+        this.imagens = this.listaImagensProduto.map(imagem => ({
+            itemImageSrc: imagem.urlImagem,
+            thumbnailImageSrc: imagem.urlImagem
+        }));
     }
 
     voltarResumoProduto(): void {
@@ -435,6 +410,8 @@ export class DetalheProdutoComponent implements OnInit {
     cadastrarImagensProduto(listaImagensProdutoUpload: ImagemProduto[]): void {
         this.imagemProdutoService.cadastrar(listaImagensProdutoUpload, true).pipe(
             tap((response) => {
+                this.listaImagensProduto = [...this.listaImagensProduto, ...response];
+                this.carregarImagensProduto();
                 this.mostrarDialogUploadImagem = false;
                 this.notificacaoService.sucesso('Upload das imagens realizado com sucesso!', undefined, false, 10);
             }),
