@@ -149,18 +149,20 @@
 
                             <ng-template [ngIf]="listaImagensProduto.length > 0">
                                 <div class="ui-g">
-                                   <p-galleria [value]="imagens" [responsiveOptions]="galleriaResponsiveOptions"
-                                            [containerStyle]="{'max-width': '800px', 'margin':'auto'}"
-                                            [numVisible]="6" [circular]="true">
-                                        <ng-template pTemplate="item" let-item>
-                                            <img [src]="item.itemImageSrc" style="width: 100%; display: block;" />
-                                        </ng-template>
+                                   <p-galleria
+                                        [value]="imagens"
+                                        [responsiveOptions]="galleriaResponsiveOptions"
+                                        [containerStyle]="{'max-width': '800px', 'margin':'auto'}"
+                                        [numVisible]="6" [circular]="true">
+                                            <ng-template pTemplate="item" let-item>
+                                                <img [src]="item.itemImageSrc" style="width: 100%; display: block;" />
+                                            </ng-template>
 
-                                        <ng-template pTemplate="thumbnail" let-item>
-                                            <div class="grid nogutter justify-center">
-                                                <img [src]="item.thumbnailImageSrc" style="display: block;" />
-                                            </div>
-                                        </ng-template>
+                                            <ng-template pTemplate="thumbnail" let-item>
+                                                <div class="grid nogutter justify-center">
+                                                    <img [src]="item.thumbnailImageSrc" style="width: 100px; height: 100px; display: block;" />
+                                                </div>
+                                            </ng-template>
                                     </p-galleria>
                                 </div>
                             </ng-template>

@@ -15,6 +15,7 @@
     --text-color-secondary: #6c757d;
     --primary-color: #016ee5;
     --primary-color-text: #ffffff;
+    --secundary-color: #444444;
     --surface-0: #ffffff;
     --surface-50: #f9fafb;
     --surface-100: #f8f9fa;
@@ -3813,7 +3814,7 @@
     }
 
     .p-paginator {
-        background: #4B4B4B;
+        background: var(--secundary-color);
         color: #007bff;
         border: solid #dee2e6;
         border-width: 0;
@@ -4635,7 +4636,7 @@
 
     .p-panel .p-panel-header {
         font-size: 15px;
-        background-color: #4B4B4B;
+        background-color: var(--secundary-color);
         border: 1px solid #bdbdbd;
         padding: 1rem 1.25rem;
         color: #ffffff;
@@ -4727,7 +4728,7 @@
         scroll-padding-inline: 2.357rem;
     }
     .p-tabview .p-tabview-nav {
-        background: #4B4B4B;
+        background: var(--secundary-color);
         border: 1px solid #dee2e6;
         border-width: 0 0 1px 0;
         border-radius: 4px 4px 0 0;
@@ -4738,8 +4739,8 @@
     .p-tabview .p-tabview-nav li .p-tabview-nav-link {
         /*border: solid;*/
         border-width: 1px;
-        border-color: #4B4B4B #4B4B4B #4B4B4B #4B4B4B;
-        background: #4B4B4B;
+        border-color: var(--secundary-color) var(--secundary-color) var(--secundary-color) var(--secundary-color);
+        background: var(--secundary-color);
         color: #ffffff !important;
         padding: 0.75rem 1rem;
         font-weight: 600;
@@ -4808,7 +4809,7 @@
     }
 
     .p-toolbar {
-        background: #4B4B4B;
+        background: var(--secundary-color);
         border: 1px solid #dee2e6;
         padding: 0.8rem;
         border-radius: 4px;
@@ -5048,7 +5049,7 @@
     }
 
     .p-fileupload .p-fileupload-buttonbar {
-        background: #4b4b4b;
+        background: var(--secundary-color);
         padding: 1rem 1.25rem;
         border: 1px solid #dee2e6;
         color: #212529;

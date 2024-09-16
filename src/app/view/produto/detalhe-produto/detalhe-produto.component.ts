@@ -36,26 +36,26 @@ export class DetalheProdutoComponent implements OnInit {
     listaDepartamentos: SelectItem[] = [];
     listaCategorias: SelectItem[] = [];
 
-    imagens!: any[];
+    imagens: any[] = [];
     listaImagensProduto: ImagemProduto[] = [];
     mostrarDialogUploadImagem: boolean = false;
 
     galleriaResponsiveOptions: any[] = [
         {
-          breakpoint: '1024px',
-          numVisible: 5
+            breakpoint: '1024px',
+            numVisible: 5
         },
         {
             breakpoint: '960px',
             numVisible: 4
         },
         {
-          breakpoint: '768px',
-          numVisible: 3
+            breakpoint: '768px',
+            numVisible: 3
         },
         {
-          breakpoint: '560px',
-          numVisible: 1
+            breakpoint: '560px',
+            numVisible: 1
         }
     ];
 
@@ -116,14 +116,11 @@ export class DetalheProdutoComponent implements OnInit {
             this.listaStatusProduto = [];
             this.statusProdutoService.buscar(undefined, undefined, true).pipe(
                 tap((response) => {
-                    let indice = 0;
-
                     for (let obj of response) {
                         this.listaStatusProduto.push({
                             label: `${obj.descricao}`,
                             value: obj
                         });
-                        indice++;
                     }
                 }),
                 catchError((error) => {
@@ -143,14 +140,11 @@ export class DetalheProdutoComponent implements OnInit {
             this.listaTiposProduto = [];
             this.tipoProdutoService.buscar(undefined, undefined, true).pipe(
                 tap((response) => {
-                    let indice = 0;
-
                     for (let obj of response) {
                         this.listaTiposProduto.push({
                             label: `${obj.descricao}`,
                             value: obj
                         });
-                        indice++;
                     }
                 }),
                 catchError((error) => {
@@ -170,14 +164,11 @@ export class DetalheProdutoComponent implements OnInit {
             this.listaMarcas = [];
             this.marcaService.buscar(undefined, undefined, true, true).pipe(
                 tap((response) => {
-                    let indice = 0;
-
                     for (let obj of response) {
                         this.listaMarcas.push({
                             label: `${obj.codigo} - ${obj.nome}`,
                             value: obj
                         });
-                        indice++;
                     }
                 }),
                 catchError((error) => {
@@ -197,14 +188,11 @@ export class DetalheProdutoComponent implements OnInit {
             this.listaDepartamentos = [];
             this.departamentoService.buscar(undefined, undefined, true, true).pipe(
                 tap((response) => {
-                    let indice = 0;
-
                     for (let obj of response) {
                         this.listaDepartamentos.push({
                             label: `${obj.codigo} - ${obj.nome}`,
                             value: obj
                         });
-                        indice++;
                     }
                 }),
                 catchError((error) => {
@@ -224,14 +212,11 @@ export class DetalheProdutoComponent implements OnInit {
             this.listaCategorias = [];
             this.categoriaService.buscar(undefined, undefined, true, undefined, true).pipe(
                 tap((response) => {
-                    let indice = 0;
-
                     for (let obj of response) {
                         this.listaCategorias.push({
                             label: `${obj.codigo} - ${obj.nome}`,
                             value: obj
                         });
-                        indice++;
                     }
                 }),
                 catchError((error) => {
