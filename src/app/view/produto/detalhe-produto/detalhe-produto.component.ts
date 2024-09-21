@@ -94,7 +94,8 @@ export class DetalheProdutoComponent implements OnInit {
         const produtoRecuperado: Produto = this.recuperarProdutoNoLocalStorage();
         if (ValidationUtils.isNotUndefinedAndNotNull(produtoRecuperado)) {
             this.produto = produtoRecuperado;
-            this.carregarInformacoesImagensProduto(this.produto.codigo);
+            await this.carregarInformacoesImagensProduto(this.produto.codigo);
+            this.carregarImagens();
             this.isEditando = true;
         }
     }
@@ -243,18 +244,23 @@ export class DetalheProdutoComponent implements OnInit {
         return produto;
     }
 
-    carregarInformacoesImagensProduto(codigoProduto: number): void {
-        this.listaImagensProduto = [];
-        this.imagemProdutoService.buscar(undefined, undefined, codigoProduto, true).pipe(
-            tap((response) => {
-                this.listaImagensProduto = [...response];
-                this.carregarImagens();
-            }),
-            catchError((error) => {
-                this.notificacaoService.erro(error.error, undefined, false, 10);
-                return of();
-            })
-        ).subscribe();
+    async carregarInformacoesImagensProduto(codigoProduto: number): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            this.listaImagensProduto = [];
+            this.imagemProdutoService.buscar(undefined, undefined, codigoProduto, true).pipe(
+                tap((response) => {
+                    this.listaImagensProduto = [...response];
+                }),
+                catchError((error) => {
+                    this.notificacaoService.erro(error.error, undefined, false, 10);
+                    reject(error);
+                    return of();
+                })
+            ).subscribe({
+                next: () => resolve(),
+                error: (erro) => reject(erro)
+            });
+        });
     }
 
     carregarImagens(): void {
@@ -418,14 +424,14 @@ export class DetalheProdutoComponent implements OnInit {
         });
     }
 
-    baixarImagem(imagemProduto: ImagemProduto): void {
-        if (ValidationUtils.isEmpty(imagemProduto)) {
+    baixarImagem(imagemSelecionada: ImagemProduto): void {
+        if (ValidationUtils.isEmpty(imagemSelecionada)) {
             this.notificacaoService.aviso('Imagem não encontrada para baixar!', undefined, false, 10);
             return;
         }
-        this.imagemProdutoService.baixarImagem(imagemProduto.codigoProduto, imagemProduto.nomeImagemServidor, true).pipe(
+        this.imagemProdutoService.baixarImagem(imagemSelecionada.codigoProduto, imagemSelecionada.nomeImagemServidor, true).pipe(
             tap((response) => {
-                saveAs(new File([response], imagemProduto.nomeImagemServidor, { type: response.type }));
+                saveAs(new File([response], imagemSelecionada.nomeImagemServidor, { type: response.type }));
             }),
             catchError((error) => {
                 this.notificacaoService.erro(error.error, undefined, false, 10);
@@ -434,8 +440,22 @@ export class DetalheProdutoComponent implements OnInit {
         ).subscribe();
     }
 
-    excluirImagem(imagemProduto: ImagemProduto): void {
-
+    excluirImagem(imagemSelecionada: ImagemProduto): void {
+        if (ValidationUtils.isEmpty(imagemSelecionada)) {
+            this.notificacaoService.aviso('Imagem não encontrada para excluir!', undefined, false, 10);
+            return;
+        }
+        this.imagemProdutoService.excluirImagem(imagemSelecionada.codigoProduto, imagemSelecionada.codigo, imagemSelecionada.nomeImagemServidor, true).pipe(
+            tap((response) => {
+                this.listaImagensProduto = this.listaImagensProduto.filter(imagem => imagem.codigo != imagemSelecionada.codigo);
+                this.carregarImagens();
+                this.notificacaoService.sucesso('Imagem: ' + imagemSelecionada.codigo + ' excluída com sucesso!', undefined, false, 10);
+            }),
+            catchError((error) => {
+                this.notificacaoService.erro(error.error, undefined, false, 10);
+                return of();
+            })
+        ).subscribe();
     }
 
 }

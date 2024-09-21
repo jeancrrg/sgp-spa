@@ -43,4 +43,13 @@ export class ImagemProdutoService {
             {params: parametros, responseType: 'blob' as 'json'}, loader, false, false);
     }
 
+    excluirImagem(codigoProduto: number, codigoImagem: number, nomeImagemServidor: string, loader: true): Observable<void> {
+        let parametros = new HttpParams();
+        parametros = parametros.append('codigoProduto', codigoProduto + '');
+        parametros = parametros.append('codigoImagem', codigoImagem + '');
+        parametros = parametros.append('nomeImagemServidor', nomeImagemServidor);
+
+        return this.requisicaoHttpService.Delete<void>(this.configuracaoAuxiliarService.getContextoSistema() + 'imagens-produto', {params: parametros}, loader, false, false);
+    }
+
 }
