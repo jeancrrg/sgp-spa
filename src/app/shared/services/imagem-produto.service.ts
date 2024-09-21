@@ -17,21 +17,30 @@ export class ImagemProdutoService {
     ) { }
 
     buscar(codigo: number, nome: string, codigoProduto: number, loader: boolean): Observable<ImagemProduto[]> {
-        let params = new HttpParams();
-        if (ValidationUtils.isNotUndefinedAndNotNull(codigo)) {
-            params = params.append('codigo', codigo + '');
+        let parametros = new HttpParams();
+        if (ValidationUtils.stringNotEmpty(codigo)) {
+            parametros = parametros.append('codigo', codigo + '');
         }
         if (ValidationUtils.stringNotEmpty(nome)) {
-            params = params.append('nome', nome);
+            parametros = parametros.append('nome', nome);
         }
-        if (ValidationUtils.isNotUndefinedAndNotNull(codigoProduto)) {
-            params = params.append('codigoProduto', codigoProduto + '');
+        if (ValidationUtils.stringNotEmpty(codigoProduto)) {
+            parametros = parametros.append('codigoProduto', codigoProduto + '');
         }
-        return this.requisicaoHttpService.Get<ImagemProduto[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'imagens-produto', {params: params}, loader, false, false);
+        return this.requisicaoHttpService.Get<ImagemProduto[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'imagens-produto', {params: parametros}, loader, false, false);
     }
 
     cadastrar(listaImagensProduto: ImagemProduto[], loader: boolean): Observable<ImagemProduto[]> {
         return this.requisicaoHttpService.Post<ImagemProduto[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'imagens-produto', listaImagensProduto, {}, loader, false, false);
+    }
+
+    baixarImagem(codigoProduto: number, nomeImagemServidor: string, loader: true): Observable<Blob> {
+        let parametros = new HttpParams();
+        parametros = parametros.append('codigoProduto', codigoProduto + '');
+        parametros = parametros.append('nomeImagemServidor', nomeImagemServidor);
+
+        return this.requisicaoHttpService.Get<Blob>(this.configuracaoAuxiliarService.getContextoSistema() + 'imagens-produto/download',
+            {params: parametros, responseType: 'blob' as 'json'}, loader, false, false);
     }
 
 }

@@ -102,9 +102,10 @@
 
                 <div class="col-12 lg:col-3 lg:mb-0">
                     <span class="p-float-label">
-                        <p-dropdown filter="true" inputId="departamentoProduto" [autoDisplayFirst]="false"
+                        <p-dropdown [filter]="true" inputId="departamentoProduto" [autoDisplayFirst]="false"
                             [options]="listaDepartamentos" [showClear]="true" [style]="{'width':'100%'}"
-                            [disabled]="desabilitarCampos" [(ngModel)]="produto.departamento">
+                            [disabled]="desabilitarCampos" [(ngModel)]="produto.departamento"
+                            optionLabel="label">
 
                             <ng-template pTemplate="empty"> Nenhum departamento encontrado! </ng-template>
                         </p-dropdown>
@@ -155,7 +156,7 @@
                                         [containerStyle]="{'max-width': '800px', 'margin':'auto'}"
                                         [numVisible]="6" [circular]="true">
                                             <ng-template pTemplate="item" let-item>
-                                                <img [src]="item.itemImageSrc" style="width: 100%; display: block;" />
+                                                <img [src]="item.itemImageSrc" style="width: 80%; display: block;" />
                                             </ng-template>
 
                                             <ng-template pTemplate="thumbnail" let-item>
@@ -220,7 +221,7 @@
                 customUpload="true"
                 maxFileSize="2000000"
                 multiple="true"
-                accept=".png, .jpeg, .jpg"
+                accept=".png, .jpg"
                 (uploadHandler)="uploadImagem($event, fileUpload)">
             </p-fileUpload>
         </div>

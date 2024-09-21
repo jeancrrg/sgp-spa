@@ -17,14 +17,14 @@ export class StatusProdutoService {
     ) { }
 
     buscar(codigo: number, descricao: string, loader: boolean): Observable<StatusProduto[]> {
-        let params = new HttpParams();
-        if (ValidationUtils.isNotUndefinedAndNotNull(codigo)) {
-            params = params.append('codigo', codigo + '');
+        let parametros = new HttpParams();
+        if (ValidationUtils.stringNotEmpty(codigo)) {
+            parametros = parametros.append('codigo', codigo + '');
         }
         if (ValidationUtils.stringNotEmpty(descricao)) {
-            params = params.append('descricao', descricao);
+            parametros = parametros.append('descricao', descricao);
         }
-        return this.requisicaoHttpService.Get<StatusProduto[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'status-produto', {params: params}, loader, false, false);
+        return this.requisicaoHttpService.Get<StatusProduto[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'status-produto', {params: parametros}, loader, false, false);
     }
 
 }

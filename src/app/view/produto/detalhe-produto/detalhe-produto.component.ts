@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import { ImagemProdutoService } from './../../../shared/services/imagem-produto.service';
 import { MarcaService } from './../../../shared/services/marca.service';
 import { TipoProdutoService } from './../../../shared/services/tipoProduto.service';
@@ -91,12 +92,15 @@ export class DetalheProdutoComponent implements OnInit {
         await this.carregarCamposDropdown();
 
         const produtoRecuperado: Produto = this.recuperarProdutoNoLocalStorage();
-        localStorage.removeItem(this.KEY_PRODUTO);
         if (ValidationUtils.isNotUndefinedAndNotNull(produtoRecuperado)) {
             this.produto = produtoRecuperado;
             this.carregarInformacoesImagensProduto(this.produto.codigo);
             this.isEditando = true;
         }
+    }
+
+    ngOnDestroy(): void {
+        localStorage.removeItem(this.KEY_PRODUTO);
     }
 
     async carregarCamposDropdown(): Promise<void> {
@@ -244,7 +248,7 @@ export class DetalheProdutoComponent implements OnInit {
         this.imagemProdutoService.buscar(undefined, undefined, codigoProduto, true).pipe(
             tap((response) => {
                 this.listaImagensProduto = [...response];
-                this.carregarImagensProduto();
+                this.carregarImagens();
             }),
             catchError((error) => {
                 this.notificacaoService.erro(error.error, undefined, false, 10);
@@ -253,7 +257,7 @@ export class DetalheProdutoComponent implements OnInit {
         ).subscribe();
     }
 
-    carregarImagensProduto(): void {
+    carregarImagens(): void {
         this.imagens = this.listaImagensProduto.map(imagem => ({
             itemImageSrc: imagem.urlImagem,
             thumbnailImageSrc: imagem.urlImagem
@@ -261,6 +265,7 @@ export class DetalheProdutoComponent implements OnInit {
     }
 
     voltarResumoProduto(): void {
+        localStorage.removeItem(this.KEY_PRODUTO);
         this.router.navigateByUrl('produto');
     }
 
@@ -358,7 +363,9 @@ export class DetalheProdutoComponent implements OnInit {
         let produtoValido: boolean = await this.validarCamposObrigatorios();
         if (produtoValido) {
             let listaImagensProdutoUpload: ImagemProduto[] = await this.processarImagensProduto(listaArquivos);
-            this.cadastrarImagensProduto(listaImagensProdutoUpload);
+            await this.cadastrarImagensProduto(listaImagensProdutoUpload);
+            this.carregarImagens();
+            this.mostrarDialogUploadImagem = false;
         }
         fileUpload.clear();
     }
@@ -392,13 +399,33 @@ export class DetalheProdutoComponent implements OnInit {
         return imagemProduto;
     }
 
-    cadastrarImagensProduto(listaImagensProdutoUpload: ImagemProduto[]): void {
-        this.imagemProdutoService.cadastrar(listaImagensProdutoUpload, true).pipe(
+    async cadastrarImagensProduto(listaImagensProdutoUpload: ImagemProduto[]): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            this.imagemProdutoService.cadastrar(listaImagensProdutoUpload, true).pipe(
+                tap((response) => {
+                    this.listaImagensProduto = [...this.listaImagensProduto, ...response];
+                    this.notificacaoService.sucesso('Upload das imagens realizado com sucesso!', undefined, false, 10);
+                }),
+                catchError((error) => {
+                    this.notificacaoService.erro(error.error, undefined, false, 10);
+                    reject(error);
+                    return of();
+                })
+            ).subscribe({
+                next: () => resolve(),
+                error: (erro) => reject(erro)
+            });
+        });
+    }
+
+    baixarImagem(imagemProduto: ImagemProduto): void {
+        if (ValidationUtils.isEmpty(imagemProduto)) {
+            this.notificacaoService.aviso('Imagem não encontrada para baixar!', undefined, false, 10);
+            return;
+        }
+        this.imagemProdutoService.baixarImagem(imagemProduto.codigoProduto, imagemProduto.nomeImagemServidor, true).pipe(
             tap((response) => {
-                this.listaImagensProduto = [...this.listaImagensProduto, ...response];
-                this.carregarImagensProduto();
-                this.mostrarDialogUploadImagem = false;
-                this.notificacaoService.sucesso('Upload das imagens realizado com sucesso!', undefined, false, 10);
+                saveAs(new File([response], imagemProduto.nomeImagemServidor, { type: response.type }));
             }),
             catchError((error) => {
                 this.notificacaoService.erro(error.error, undefined, false, 10);
@@ -407,11 +434,7 @@ export class DetalheProdutoComponent implements OnInit {
         ).subscribe();
     }
 
-    baixarImagem(imagem): void {
-
-    }
-
-    excluirImagem(imagem): void {
+    excluirImagem(imagemProduto: ImagemProduto): void {
 
     }
 

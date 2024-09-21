@@ -19,7 +19,7 @@ export class ExcelService {
     ) {}
 
     public async exportarArquivoExcel(json: any[], nomeArquivo: string) {
-        if (!ValidationUtils.isNotUndefinedAndNotNull(json) || json.length <= 0) {
+        if (!ValidationUtils.stringNotEmpty(json) || json.length <= 0) {
             this.notificacaoService.informacao('Nenhum registro para ser exportado!');
             return;
         }

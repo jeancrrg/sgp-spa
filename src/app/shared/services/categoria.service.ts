@@ -17,20 +17,20 @@ export class CategoriaService {
     ) { }
 
     buscar(codigo: number, nome: string, indicadorAtivo: boolean, codigoDepartamento: number, loader: boolean): Observable<Categoria[]> {
-        let params = new HttpParams();
-        if (ValidationUtils.isNotUndefinedAndNotNull(codigo)) {
-            params = params.append('codigo', codigo + '');
+        let parametros = new HttpParams();
+        if (ValidationUtils.stringNotEmpty(codigo)) {
+            parametros = parametros.append('codigo', codigo + '');
         }
         if (ValidationUtils.stringNotEmpty(nome)) {
-            params = params.append('nome', nome);
+            parametros = parametros.append('nome', nome);
         }
-        if (ValidationUtils.isNotUndefinedAndNotNull(indicadorAtivo)) {
-            params = params.append('indicadorAtivo', indicadorAtivo + '');
+        if (ValidationUtils.stringNotEmpty(indicadorAtivo)) {
+            parametros = parametros.append('indicadorAtivo', indicadorAtivo + '');
         }
-        if (ValidationUtils.isNotUndefinedAndNotNull(codigoDepartamento)) {
-            params = params.append('codigoDepartamento', codigoDepartamento + '');
+        if (ValidationUtils.stringNotEmpty(codigoDepartamento)) {
+            parametros = parametros.append('codigoDepartamento', codigoDepartamento + '');
         }
-        return this.requisicaoHttpService.Get<Categoria[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'categorias', {params: params}, loader, false, false);
+        return this.requisicaoHttpService.Get<Categoria[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'categorias', {params: parametros}, loader, false, false);
     }
 
     cadastrar(categoria: Categoria, loader: boolean): Observable<Categoria> {

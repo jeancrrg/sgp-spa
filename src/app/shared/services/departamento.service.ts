@@ -17,17 +17,17 @@ export class DepartamentoService {
     ) { }
 
     buscar(codigo: number, nome: string, indicadorAtivo: boolean, loader: boolean): Observable<Departamento[]> {
-        let params = new HttpParams();
-        if (ValidationUtils.isNotUndefinedAndNotNull(codigo)) {
-            params = params.append('codigo', codigo + '');
+        let parametros = new HttpParams();
+        if (ValidationUtils.stringNotEmpty(codigo)) {
+            parametros = parametros.append('codigo', codigo + '');
         }
         if (ValidationUtils.stringNotEmpty(nome)) {
-            params = params.append('nome', nome);
+            parametros = parametros.append('nome', nome);
         }
-        if (ValidationUtils.isNotUndefinedAndNotNull(indicadorAtivo)) {
-            params = params.append('indicadorAtivo', indicadorAtivo + '');
+        if (ValidationUtils.stringNotEmpty(indicadorAtivo)) {
+            parametros = parametros.append('indicadorAtivo', indicadorAtivo + '');
         }
-        return this.requisicaoHttpService.Get<Departamento[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'departamentos', {params: params}, loader, false, false);
+        return this.requisicaoHttpService.Get<Departamento[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'departamentos', {params: parametros}, loader, false, false);
     }
 
     cadastrar(departamento: Departamento, loader: boolean): Observable<Departamento> {

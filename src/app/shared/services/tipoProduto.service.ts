@@ -17,14 +17,14 @@ export class TipoProdutoService {
     ) { }
 
     buscar(codigo: number, descricao: string, loader: boolean): Observable<TipoProduto[]> {
-        let params = new HttpParams();
-        if (ValidationUtils.isNotUndefinedAndNotNull(codigo)) {
-            params = params.append('codigo', codigo + '');
+        let parametros = new HttpParams();
+        if (ValidationUtils.stringNotEmpty(codigo)) {
+            parametros = parametros.append('codigo', codigo + '');
         }
         if (ValidationUtils.stringNotEmpty(descricao)) {
-            params = params.append('descricao', descricao);
+            parametros = parametros.append('descricao', descricao);
         }
-        return this.requisicaoHttpService.Get<TipoProduto[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'tipos-produto', {params: params}, loader, false, false);
+        return this.requisicaoHttpService.Get<TipoProduto[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'tipos-produto', {params: parametros}, loader, false, false);
     }
 
 }

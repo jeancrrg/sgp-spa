@@ -78,14 +78,11 @@ export class ResumoProdutoComponent implements OnInit {
         this.listaTiposProdutos = [];
         this.tipoProdutoService.buscar(undefined, undefined, true).pipe(
             tap((response) => {
-                let indice = 0;
-
                 for (let obj of response) {
                     this.listaTiposProdutos.push({
                         label: `${obj.descricao}`,
                         value: obj
                     });
-                    indice++;
                 }
             }),
             catchError((error) => {
@@ -99,14 +96,11 @@ export class ResumoProdutoComponent implements OnInit {
         this.listaStatusProdutos = [];
         this.statusProdutoService.buscar(undefined, undefined, true).pipe(
             tap((response) => {
-                let indice = 0;
-
                 for (let obj of response) {
                     this.listaStatusProdutos.push({
                         label: `${obj.descricao}`,
                         value: obj
                     });
-                    indice++;
                 }
             }),
             catchError((error) => {

@@ -67,14 +67,11 @@ export class CategoriaComponent implements OnInit {
         this.listaDepartamentos = [];
         this.departamentoService.buscar(undefined, undefined, true, true).pipe(
             tap((response) => {
-                let indice = 0;
-
                 for (let obj of response) {
                     this.listaDepartamentos.push({
                         label: `${obj.codigo} - ${obj.nome}`,
                         value: obj
                     });
-                    indice++;
                 }
             }),
             catchError((error) => {
