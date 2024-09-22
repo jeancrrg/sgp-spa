@@ -17,6 +17,7 @@ import { TablePrimeColumOptions } from 'src/app/core/components/dynamic-table/Ta
 import { FileUpload } from 'primeng/fileupload';
 import { ImagemProduto } from 'src/app/shared/models/cadastro/ImagemProduto.model';
 import { ConverterUtils } from 'src/app/core/utils/ConverterUtils.util';
+import { Image } from 'primeng/image';
 
 @Component({
     selector: 'app-detalhe-produto',
@@ -40,8 +41,9 @@ export class DetalheProdutoComponent implements OnInit {
     imagens: any[] = [];
     listaImagensProduto: ImagemProduto[] = [];
     mostrarDialogUploadImagem: boolean = false;
+    mostrarImagemExpandida: boolean = false;
 
-    galleriaResponsiveOptions: any[] = [
+    optionsGaleriaImages: any[] = [
         {
             breakpoint: '1024px',
             numVisible: 5
@@ -264,10 +266,15 @@ export class DetalheProdutoComponent implements OnInit {
     }
 
     carregarImagens(): void {
-        this.imagens = this.listaImagensProduto.map(imagem => ({
-            itemImageSrc: imagem.urlImagem,
-            thumbnailImageSrc: imagem.urlImagem
-        }));
+        this.imagens = [];
+        if (ValidationUtils.isNotEmpty(this.listaImagensProduto) && this.listaImagensProduto.length >= 0) {
+            this.imagens = this.listaImagensProduto.map(imagem => ({
+                itemImageSrc: imagem.urlImagem,
+                thumbnailImageSrc: imagem.urlImagem,
+                previewImageSrc: true,
+                alt: imagem.nome
+            }));
+        }
     }
 
     voltarResumoProduto(): void {
@@ -422,6 +429,10 @@ export class DetalheProdutoComponent implements OnInit {
                 error: (erro) => reject(erro)
             });
         });
+    }
+
+    expandirImagem(): void {
+        this.mostrarImagemExpandida = true;
     }
 
     baixarImagem(imagemSelecionada: ImagemProduto): void {
