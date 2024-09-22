@@ -18,13 +18,13 @@ export class DepartamentoService {
 
     buscar(codigo: number, nome: string, indicadorAtivo: boolean, loader: boolean): Observable<Departamento[]> {
         let parametros = new HttpParams();
-        if (ValidationUtils.stringNotEmpty(codigo)) {
+        if (ValidationUtils.isNotEmpty(codigo)) {
             parametros = parametros.append('codigo', codigo + '');
         }
-        if (ValidationUtils.stringNotEmpty(nome)) {
+        if (ValidationUtils.isNotEmpty(nome)) {
             parametros = parametros.append('nome', nome);
         }
-        if (ValidationUtils.stringNotEmpty(indicadorAtivo)) {
+        if (ValidationUtils.isNotEmpty(indicadorAtivo)) {
             parametros = parametros.append('indicadorAtivo', indicadorAtivo + '');
         }
         return this.requisicaoHttpService.Get<Departamento[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'departamentos', {params: parametros}, loader, false, false);

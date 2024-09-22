@@ -18,16 +18,16 @@ export class CategoriaService {
 
     buscar(codigo: number, nome: string, indicadorAtivo: boolean, codigoDepartamento: number, loader: boolean): Observable<Categoria[]> {
         let parametros = new HttpParams();
-        if (ValidationUtils.stringNotEmpty(codigo)) {
+        if (ValidationUtils.isNotEmpty(codigo)) {
             parametros = parametros.append('codigo', codigo + '');
         }
-        if (ValidationUtils.stringNotEmpty(nome)) {
+        if (ValidationUtils.isNotEmpty(nome)) {
             parametros = parametros.append('nome', nome);
         }
-        if (ValidationUtils.stringNotEmpty(indicadorAtivo)) {
+        if (ValidationUtils.isNotEmpty(indicadorAtivo)) {
             parametros = parametros.append('indicadorAtivo', indicadorAtivo + '');
         }
-        if (ValidationUtils.stringNotEmpty(codigoDepartamento)) {
+        if (ValidationUtils.isNotEmpty(codigoDepartamento)) {
             parametros = parametros.append('codigoDepartamento', codigoDepartamento + '');
         }
         return this.requisicaoHttpService.Get<Categoria[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'categorias', {params: parametros}, loader, false, false);

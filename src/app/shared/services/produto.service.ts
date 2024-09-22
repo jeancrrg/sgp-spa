@@ -18,19 +18,19 @@ export class ProdutoService {
 
     buscar(codigo: number, nome: string, codigoTipoProduto: number, codigoStatusProduto: number, indicadorSemEstoque: boolean, loader: boolean): Observable<Produto[]> {
         let parametros = new HttpParams();
-        if (ValidationUtils.stringNotEmpty(codigo)) {
+        if (ValidationUtils.isNotEmpty(codigo)) {
             parametros = parametros.append('codigo', codigo + '');
         }
-        if (ValidationUtils.stringNotEmpty(nome)) {
+        if (ValidationUtils.isNotEmpty(nome)) {
             parametros = parametros.append('nome', nome);
         }
-        if (ValidationUtils.stringNotEmpty(codigoTipoProduto)) {
+        if (ValidationUtils.isNotEmpty(codigoTipoProduto)) {
             parametros = parametros.append('codigoTipoProduto', codigoTipoProduto + '');
         }
-        if (ValidationUtils.stringNotEmpty(codigoStatusProduto)) {
+        if (ValidationUtils.isNotEmpty(codigoStatusProduto)) {
             parametros = parametros.append('codigoStatusProduto', codigoStatusProduto + '');
         }
-        if (ValidationUtils.stringNotEmpty(indicadorSemEstoque)) {
+        if (ValidationUtils.isNotEmpty(indicadorSemEstoque)) {
             parametros = parametros.append('indicadorSemEstoque', indicadorSemEstoque + '');
         }
         return this.requisicaoHttpService.Get<Produto[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'produtos', {params: parametros}, loader, false, false);

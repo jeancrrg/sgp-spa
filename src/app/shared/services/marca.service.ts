@@ -18,13 +18,13 @@ export class MarcaService {
 
     buscar(codigo: number, nome: string, indicadorAtivo: boolean, loader: boolean): Observable<Marca[]> {
         let parametros = new HttpParams();
-        if (ValidationUtils.stringNotEmpty(codigo)) {
+        if (ValidationUtils.isNotEmpty(codigo)) {
             parametros = parametros.append('codigo', codigo + '');
         }
-        if (ValidationUtils.stringNotEmpty(nome)) {
+        if (ValidationUtils.isNotEmpty(nome)) {
             parametros = parametros.append('nome', nome);
         }
-        if (ValidationUtils.stringNotEmpty(indicadorAtivo)) {
+        if (ValidationUtils.isNotEmpty(indicadorAtivo)) {
             parametros = parametros.append('indicadorAtivo', indicadorAtivo + '');
         }
         return this.requisicaoHttpService.Get<Marca[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'marcas', {params: parametros}, loader, false, false);

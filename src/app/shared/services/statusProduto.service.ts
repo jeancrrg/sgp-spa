@@ -18,10 +18,10 @@ export class StatusProdutoService {
 
     buscar(codigo: number, descricao: string, loader: boolean): Observable<StatusProduto[]> {
         let parametros = new HttpParams();
-        if (ValidationUtils.stringNotEmpty(codigo)) {
+        if (ValidationUtils.isNotEmpty(codigo)) {
             parametros = parametros.append('codigo', codigo + '');
         }
-        if (ValidationUtils.stringNotEmpty(descricao)) {
+        if (ValidationUtils.isNotEmpty(descricao)) {
             parametros = parametros.append('descricao', descricao);
         }
         return this.requisicaoHttpService.Get<StatusProduto[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'status-produto', {params: parametros}, loader, false, false);

@@ -18,13 +18,13 @@ export class ImagemProdutoService {
 
     buscar(codigo: number, nome: string, codigoProduto: number, loader: boolean): Observable<ImagemProduto[]> {
         let parametros = new HttpParams();
-        if (ValidationUtils.stringNotEmpty(codigo)) {
+        if (ValidationUtils.isNotEmpty(codigo)) {
             parametros = parametros.append('codigo', codigo + '');
         }
-        if (ValidationUtils.stringNotEmpty(nome)) {
+        if (ValidationUtils.isNotEmpty(nome)) {
             parametros = parametros.append('nome', nome);
         }
-        if (ValidationUtils.stringNotEmpty(codigoProduto)) {
+        if (ValidationUtils.isNotEmpty(codigoProduto)) {
             parametros = parametros.append('codigoProduto', codigoProduto + '');
         }
         return this.requisicaoHttpService.Get<ImagemProduto[]>(this.configuracaoAuxiliarService.getContextoSistema() + 'imagens-produto', {params: parametros}, loader, false, false);

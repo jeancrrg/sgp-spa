@@ -102,10 +102,9 @@
 
                 <div class="col-12 lg:col-3 lg:mb-0">
                     <span class="p-float-label">
-                        <p-dropdown [filter]="true" inputId="departamentoProduto" [autoDisplayFirst]="false"
+                        <p-dropdown filter="true" inputId="departamentoProduto" [autoDisplayFirst]="false"
                             [options]="listaDepartamentos" [showClear]="true" [style]="{'width':'100%'}"
-                            [disabled]="desabilitarCampos" [(ngModel)]="produto.departamento"
-                            optionLabel="label">
+                            [disabled]="desabilitarCampos" [(ngModel)]="produto.departamento" (onChange)="onDepartamentoChange($event)">
 
                             <ng-template pTemplate="empty"> Nenhum departamento encontrado! </ng-template>
                         </p-dropdown>
@@ -124,7 +123,6 @@
                         <label for="categoriaProduto"> Categoria </label>
                     </span>
                 </div>
-
             </div>
 
         </p-fieldset>
@@ -144,7 +142,7 @@
 
                             <ng-template [ngIf]="listaImagensProduto.length <= 0">
                                 <div class="card">
-                                    <span> Nenhum imagem encontrada </span>
+                                    <span> Nenhuma imagem encontrada </span>
                                 </div>
                             </ng-template>
 
@@ -156,7 +154,7 @@
                                 </div>
 
                                 <!-- GALERIA DE IMAGENS EXPANDIDA -->
-                                <div class="ui-g-12">
+                                <div class="ui-g-12" [ngClass]="{'hide-navigation': true}">
                                     <p-galleria
                                         [(value)]="imagens"
                                         [(visible)]="mostrarImagemExpandida"

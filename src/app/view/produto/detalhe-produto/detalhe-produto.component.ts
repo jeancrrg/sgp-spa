@@ -17,7 +17,8 @@ import { TablePrimeColumOptions } from 'src/app/core/components/dynamic-table/Ta
 import { FileUpload } from 'primeng/fileupload';
 import { ImagemProduto } from 'src/app/shared/models/cadastro/ImagemProduto.model';
 import { ConverterUtils } from 'src/app/core/utils/ConverterUtils.util';
-import { Image } from 'primeng/image';
+import { Departamento } from 'src/app/shared/models/cadastro/Departamento.model';
+import { Categoria } from 'src/app/shared/models/cadastro/Categoria.model';
 
 @Component({
     selector: 'app-detalhe-produto',
@@ -95,10 +96,14 @@ export class DetalheProdutoComponent implements OnInit {
 
         const produtoRecuperado: Produto = this.recuperarProdutoNoLocalStorage();
         if (ValidationUtils.isNotUndefinedAndNotNull(produtoRecuperado)) {
+            this.isEditando = true;
             this.produto = produtoRecuperado;
+            this.listaCategorias = this.listaCategorias.filter(categoria => categoria.label ==  `${this.produto.categoria.codigo} - ${this.produto.categoria.nome}`);
             await this.carregarInformacoesImagensProduto(this.produto.codigo);
             this.carregarImagens();
-            this.isEditando = true;
+        } else {
+            this.listaCategorias = [];
+            this.produto.categoria = undefined;
         }
     }
 
@@ -110,18 +115,17 @@ export class DetalheProdutoComponent implements OnInit {
         return new Promise<void>(async resolve => {
             await this.carregarCampoStatusProduto();
             await this.carregarCampoTipoProduto();
-            await this.carregarCampoMarca();
-            await this.carregarCampoDepartamento();
-            await this.carregarCampoCategoria();
-
+            await this.carregarCampoMarca(undefined, undefined, true);
+            await this.carregarCampoDepartamento(undefined, undefined, true);
+            await this.carregarCampoCategoria(undefined, undefined, true, undefined);
             resolve();
         });
     }
 
-    async carregarCampoStatusProduto(): Promise<void> {
+    async carregarCampoStatusProduto(codigo?: number, descricao?: string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             this.listaStatusProduto = [];
-            this.statusProdutoService.buscar(undefined, undefined, true).pipe(
+            this.statusProdutoService.buscar(codigo, descricao, true).pipe(
                 tap((response) => {
                     for (let obj of response) {
                         this.listaStatusProduto.push({
@@ -142,10 +146,10 @@ export class DetalheProdutoComponent implements OnInit {
         });
     }
 
-    async carregarCampoTipoProduto(): Promise<void> {
+    async carregarCampoTipoProduto(codigo?: number, descricao?: string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             this.listaTiposProduto = [];
-            this.tipoProdutoService.buscar(undefined, undefined, true).pipe(
+            this.tipoProdutoService.buscar(codigo, descricao, true).pipe(
                 tap((response) => {
                     for (let obj of response) {
                         this.listaTiposProduto.push({
@@ -166,10 +170,10 @@ export class DetalheProdutoComponent implements OnInit {
         });
     }
 
-    async carregarCampoMarca(): Promise<void> {
+    async carregarCampoMarca(codigo: number, nome: string, indicadorAtivo: boolean): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             this.listaMarcas = [];
-            this.marcaService.buscar(undefined, undefined, true, true).pipe(
+            this.marcaService.buscar(codigo, nome, indicadorAtivo, true).pipe(
                 tap((response) => {
                     for (let obj of response) {
                         this.listaMarcas.push({
@@ -190,10 +194,10 @@ export class DetalheProdutoComponent implements OnInit {
         });
     }
 
-    async carregarCampoDepartamento(): Promise<void> {
+    async carregarCampoDepartamento(codigo: number, nome: string, indicadorAtivo: boolean): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             this.listaDepartamentos = [];
-            this.departamentoService.buscar(undefined, undefined, true, true).pipe(
+            this.departamentoService.buscar(codigo, nome, indicadorAtivo, true).pipe(
                 tap((response) => {
                     for (let obj of response) {
                         this.listaDepartamentos.push({
@@ -214,10 +218,10 @@ export class DetalheProdutoComponent implements OnInit {
         });
     }
 
-    async carregarCampoCategoria(): Promise<void> {
+    async carregarCampoCategoria(codigo: number, nome: string, indicadorAtivo: boolean, codigoDepartamento: number): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             this.listaCategorias = [];
-            this.categoriaService.buscar(undefined, undefined, true, undefined, true).pipe(
+            this.categoriaService.buscar(codigo, nome, indicadorAtivo, codigoDepartamento, true).pipe(
                 tap((response) => {
                     for (let obj of response) {
                         this.listaCategorias.push({
@@ -236,6 +240,15 @@ export class DetalheProdutoComponent implements OnInit {
                 error: (erro) => reject(erro)
             });
         });
+    }
+
+    onDepartamentoChange(departamento: SelectItem): void {
+        this.listaCategorias = [];
+        this.produto.categoria = undefined;
+        let departamentoSelecionado: Departamento = departamento.value;
+        if (ValidationUtils.isNotEmpty(departamentoSelecionado)) {
+            this.carregarCampoCategoria(undefined, undefined, true, departamentoSelecionado.codigo);
+        }
     }
 
     recuperarProdutoNoLocalStorage() {
@@ -317,7 +330,7 @@ export class DetalheProdutoComponent implements OnInit {
             ];
 
             for (const campo of listaCamposObrigatorios) {
-                if (!ValidationUtils.isNotUndefinedAndNotNull(campo.valor)) {
+                if (ValidationUtils.isEmpty(campo.valor)) {
                     this.notificacaoService.aviso(campo.mensagem, undefined, false, 10);
                     return resolve(false);
                 }
