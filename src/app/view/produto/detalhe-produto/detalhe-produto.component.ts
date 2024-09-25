@@ -287,6 +287,8 @@ export class DetalheProdutoComponent implements OnInit {
                 previewImageSrc: true,
                 alt: imagem.nome
             }));
+            this.imagens = [...this.imagens];
+            console.log('Imagens: ', this.imagens);
         }
     }
 
@@ -390,6 +392,9 @@ export class DetalheProdutoComponent implements OnInit {
         if (produtoValido) {
             let listaImagensProdutoUpload: ImagemProduto[] = await this.processarImagensProduto(listaArquivos);
             await this.cadastrarImagensProduto(listaImagensProdutoUpload);
+
+            console.log('Lista imagens: ', this.listaImagensProduto);
+
             this.carregarImagens();
             this.mostrarDialogUploadImagem = false;
         }
@@ -431,6 +436,7 @@ export class DetalheProdutoComponent implements OnInit {
                 tap((response) => {
                     this.listaImagensProduto = [...this.listaImagensProduto, ...response];
                     this.notificacaoService.sucesso('Upload das imagens realizado com sucesso!', undefined, false, 10);
+                    console.log('Lista imagens carregadas: ', this.listaImagensProduto);
                 }),
                 catchError((error) => {
                     this.notificacaoService.erro(error.error, undefined, false, 10);
