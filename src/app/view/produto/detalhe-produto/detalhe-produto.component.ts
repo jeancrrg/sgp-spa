@@ -461,7 +461,7 @@ export class DetalheProdutoComponent implements OnInit {
         }
         this.imagemProdutoService.baixarImagem(imagemSelecionada.codigoProduto, imagemSelecionada.nomeImagemServidor, true).pipe(
             tap((response) => {
-                saveAs(new File([response], imagemSelecionada.nomeImagemServidor, { type: response.type }));
+                saveAs(new File([response], imagemSelecionada.nome, { type: response.type }));
             }),
             catchError((error) => {
                 this.notificacaoService.erro(error.error, undefined, false, 10);
