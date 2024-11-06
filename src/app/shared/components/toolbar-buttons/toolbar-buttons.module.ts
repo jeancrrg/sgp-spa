@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { ToolbarModule } from 'primeng/toolbar';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { ButtonModule } from 'primeng/button';
+import { RippleModule } from 'primeng/ripple';
 
 @NgModule({
     declarations: [ToolbarButtonsComponent],
@@ -12,7 +14,9 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
         CommonModule,
         ToolbarModule,
         InputGroupModule,
-        InputGroupAddonModule
+        InputGroupAddonModule,
+        ButtonModule,
+        RippleModule
     ]
 })
 export class ToolbarButtonsModule {}

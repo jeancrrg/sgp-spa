@@ -7,16 +7,22 @@ import { ToolbarButtonsModule } from "src/app/shared/components/toolbar-buttons/
 import { MenuBarModule } from "../../shared/components/menu-bar/menu-bar.module";
 import { DataViewModule } from "primeng/dataview";
 import { CarouselModule } from "primeng/carousel";
+import { RatingModule } from "primeng/rating";
+import { ButtonModule } from "primeng/button";
+import { RippleModule } from "primeng/ripple";
 
 @NgModule({
     declarations: [HomeComponent],
     imports: [
-    CommonModule,
-    ToolbarButtonsModule,
-    RouterModule.forChild(HomeRoutes),
-    MenuBarModule,
-    DataViewModule,
-    CarouselModule
-]
+        CommonModule,
+        ToolbarButtonsModule,
+        RouterModule.forChild(HomeRoutes),
+        MenuBarModule,
+        DataViewModule,
+        CarouselModule,
+        RatingModule,
+        ButtonModule,
+        RippleModule
+    ]
 })
 export class HomeModule {}

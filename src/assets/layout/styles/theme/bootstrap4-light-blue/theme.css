@@ -1,4 +1,13 @@
 :root {
+    /* CORES USADAS */
+    --text-color: #212529;
+    --primary-color: #D3D3D3;
+    --primary-color-text: black;
+    --secundary-color: gray;
+    --secundary-color-text: #6c757d;
+    --surface-0: #ffffff;
+    --cor-cinza-claro: #f1f1f1;
+
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
         Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
         "Segoe UI Symbol";
@@ -12,12 +21,6 @@
     --surface-d: #dee2e6;
     --surface-e: #ffffff;
     --surface-f: #ffffff;
-    --text-color: #212529;
-    --primary-color: #D3D3D3;
-    --primary-color-text: black;
-    --secundary-color: gray;
-    --secundary-color-text: #6c757d;
-    --surface-0: #ffffff;
     --surface-50: #f9fafb;
     --surface-100: #f8f9fa;
     --surface-200: #e9ecef;
@@ -1352,13 +1355,12 @@
         width: 100%;
     }
     .p-inputtext:enabled:hover {
-        border-color: var(--surface-400);
+        border-color: var(--secundary-color-text);
     }
     .p-inputtext:enabled:focus {
         outline: 0 none;
         outline-offset: 0;
-        box-shadow: 0 0 0 0.2rem #d0cccc;
-        border-color: #d0cccc;
+        border-color: var(--secundary-color-text);
     }
     .p-inputtext.ng-dirty.ng-invalid {
         border-color: #dc3545;
@@ -2127,22 +2129,22 @@
 
     .p-button {
         color: #ffffff;
-        background: #007bff;
-        border: 1px solid #007bff;
+        background: var(--secundary-color);
+        border: 1px solid var(--secundary-color);
         padding: 0.5rem 0.75rem;
         font-size: 15px;
         transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
         border-radius: 4px;
     }
     .p-button:not(:disabled):hover {
-        background: #0069d9;
-        color: #ffffff;
-        border-color: #0069d9;
+        background: var(--secundary-color-text);
+        color: var(--surface-0);
+        border-color: var(--cor-cinza-claro);
     }
     .p-button:not(:disabled):active {
-        background: #0062cc;
+        background: var(--secundary-color);
         color: #ffffff;
-        border-color: #0062cc;
+        border-color: var(--secundary-color);
     }
     .p-button.p-button-outlined {
         background-color: transparent;
@@ -2191,16 +2193,16 @@
     }
     .p-button.p-button-text.p-button-plain:not(:disabled):hover {
         background: #e9ecef;
-        color: #6c757d;
+        color: var(--secundary-color-text);
     }
     .p-button.p-button-text.p-button-plain:not(:disabled):active {
         background: #dee2e6;
-        color: #6c757d;
+        color: var(--secundary-color-text);
     }
     .p-button:focus {
         outline: 0 none;
         outline-offset: 0;
-        box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+        /*box-shadow: 0 0 0 0.2rem var(--cor-cinza-claro);*/
     }
     .p-button .p-button-label {
         transition-duration: 0.15s;
@@ -3132,9 +3134,9 @@
     }
     .p-carousel .p-carousel-content .p-carousel-prev:enabled:hover,
     .p-carousel .p-carousel-content .p-carousel-next:enabled:hover {
-        color: var(--secundary-color);
-        border-color: var(--surface-400);
-        background: var(--surface-400);
+        color: var(--surface-0);
+        border-color: var(--secundary-color-text);
+        background: var(--secundary-color-text);
     }
     .p-carousel .p-carousel-content .p-carousel-prev:focus-visible,
     .p-carousel .p-carousel-content .p-carousel-next:focus-visible {
@@ -3157,7 +3159,7 @@
         border-radius: 0;
     }
     .p-carousel .p-carousel-indicators .p-carousel-indicator button:hover {
-        background: #dee2e6;
+        background: var(--secundary-color-text);
     }
     .p-carousel
         .p-carousel-indicators
@@ -4811,9 +4813,8 @@
 
     .p-toolbar {
         background: var(--primary-color);
-        padding: 0.8rem;
         gap: 0.5rem;
-        height: 6.2rem;
+        height: 7rem;
     }
 
     .p-toolbar .p-toolbar-separator {
@@ -5731,6 +5732,7 @@
         color: rgba(0, 0, 0, 0.5);
         transition: box-shadow 0.15s;
         border-radius: 4px;
+        background: transparent;
     }
     .p-menubar
         .p-menubar-root-list
@@ -5770,7 +5772,7 @@
         > .p-menuitem:not(.p-highlight):not(.p-disabled)
         > .p-menuitem-content:hover {
         color: rgba(0, 0, 0, 0.7);
-        background: transparent;
+        background: var(--cor-cinza-claro);
     }
     .p-menubar
         .p-menubar-root-list
@@ -5828,7 +5830,7 @@
     }
     .p-menubar .p-menuitem.p-highlight > .p-menuitem-content {
         color: #212529;
-        background: #e9ecef;
+        background-color: var(--cor-cinza-claro);
     }
     .p-menubar
         .p-menuitem.p-highlight
@@ -6510,8 +6512,8 @@
         background: transparent;
         transition: box-shadow 0.15s;
         border-radius: 4px;
-        background: transparent;
     }
+
     .p-steps .p-steps-item .p-menuitem-link .p-steps-number {
         color: #212529;
         border: 1px solid #dee2e6;

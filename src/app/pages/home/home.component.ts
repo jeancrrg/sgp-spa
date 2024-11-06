@@ -96,6 +96,9 @@ export class HomeComponent implements OnInit {
         ]
     }
 
+    adicionarAoCarrinho(): void {
+
+    }
 
 
 }

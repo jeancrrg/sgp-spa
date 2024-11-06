@@ -11,4 +11,8 @@ export class ToolbarButtonsComponent implements OnInit {
 
     ngOnInit(): void {}
 
+    pesquisar(): void {
+
+    }
+
 }

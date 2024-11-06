@@ -2,38 +2,43 @@
 <div class="divisor"></div>
 <menu-bar [listaMenuItens]="listaMenuItens"></menu-bar>
 
-<div class="card sem-borda">
-    <div class="col-12 p-0">
-        <p-carousel [value]="listaProdutos" [numVisible]="1" [numScroll]="1" [circular]="true">
-            <ng-template let-product pTemplate="item">
+<div class="card container-principal">
+    <div class="col-12 container-carrossel">
+        <p-carousel [value]="listaProdutos" [circular]="true">
+            <ng-template pTemplate="item">
                 <div class="col-12">
-                    <img src="assets/layout/images/aneis.png" class="shadow-4" height="350px" width="100%"/>
+                    <img src="assets/layout/images/aneis.png" class="imagem-carrossel"/>
                 </div>
             </ng-template>
         </p-carousel>
     </div>
 
-    <div class="col-12 p-0">
-        <p-dataView [value]="listaProdutos" [paginator]="false" filterBy="name" [sortField]="sortField" [sortOrder]="sortOrder" layout="grid">
-            <ng-template let-products pTemplate="gridItem">
+    <div class="col-12 container-produtos">
+        <p-dataView [value]="listaProdutos" layout="grid">
+            <ng-template pTemplate="gridItem">
                 <div class="grid grid-nogutter">
-                    <div class="col-12 md:col-4" *ngFor="let product of listaProdutos">
-                        <div class="card m-3 border-1 surface-border card-produtos">
-                            <div class="flex flex-column align-items-center text-center mb-3">
-                                <img [src]="'assets/demo/images/product/' + product.image" [alt]="product.name" class="w-9 shadow-2 my-3 mx-0"/>
+                    <div class="col-12 md:col-4" *ngFor="let produto of listaProdutos">
 
-                                <div class="text-2xl font-bold">{{product.name}}</div>
+                        <div class="card card-produto">
+                            <img [src]="'assets/demo/images/product/' + produto.image" [alt]="produto.name" class="imagem-produto"/>
 
-                                <div class="mb-3">{{product.description}}</div>
-
-                                <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>
+                            <div class="nome-produto">
+                                {{ produto.name }}
                             </div>
 
-                            <div class="flex align-items-center justify-content-between">
-                                <span class="text-2xl font-semibold">${{product.price}}</span>
-                                <p-button icon="pi pi-shopping-cart" [disabled]="product.inventoryStatus === 'OUTOFSTOCK'"></p-button>
+                            <div class="descricao-produto">
+                                {{ produto.description }}
                             </div>
+
+                            <p-rating [ngModel]="produto.rating" class="avaliacao-produto" [readonly]="true" [cancel]="false"></p-rating>
+
+                            <span class="preco-produto">
+                                ${{ produto.price }}
+                            </span>
+
+                            <button pButton pRipple class="btn-adicionar" label="Adicionar" icon="pi pi-shopping-cart" (click)="adicionarAoCarrinho()"></button>
                         </div>
+
                     </div>
                 </div>
             </ng-template>

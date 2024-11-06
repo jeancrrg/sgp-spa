@@ -1,27 +1,25 @@
 <p-toolbar class="layout-toolbar">
     <div class="p-toolbar-group-start">
         <a class="logo-toolbar" routerLink="">
-            <span> Pais & Filhos pratas </span>
+            <img src="assets/layout/images/logo Pais & Filhos.png" alt="">
         </a>
     </div>
 
     <div class="p-toolbar-group-center search">
         <p-inputGroup class="input-toolbar">
-            <input type="text" pInputText class="p-inputtext" placeholder="Pesquisar..." />
-            <button type="button" pButton>
-                <i class="pi pi-search"></i>
-            </button>
+            <input type="text" pInputText class="p-inputtext" placeholder="Pesquise em toda loja..." />
+            <button pButton pRipple icon="pi pi-search" (click)="pesquisar()"></button>
         </p-inputGroup>
     </div>
 
     <div class="p-toolbar-group-end toolbar-buttons">
-        <button class="buttons">
+        <button pButton pRipple class="buttons">
             <i class="pi pi-user icons"></i>
         </button>
-        <button class="buttons">
+        <button pButton pRipple class="buttons">
             <i class="pi pi-shopping-cart icons"></i>
         </button>
-        <button class="buttons">
+        <button pButton pRipple class="buttons">
             <i class="pi pi-map-marker icons"></i>
         </button>
     </div>
